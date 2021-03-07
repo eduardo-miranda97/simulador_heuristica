@@ -1,6 +1,8 @@
+# -*- coding:utf-8 -*-
+
 class StructureMap(object):
 
-  # Map Constant
+    # Map Constant
     M_EMPTY = 0
     M_WALL = 1
     M_DOOR = 2
@@ -17,7 +19,6 @@ class StructureMap(object):
         self.len_row = 0
         self.len_col = 0
 
-
     def load_map(self):
         file = open(self.path, 'r')
         for line in file:
@@ -28,4 +29,3 @@ class StructureMap(object):
             self.len_row += 1
         file.close()
         self.len_col = len(self.map[0])
-
