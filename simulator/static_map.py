@@ -1,9 +1,10 @@
 # -*- coding:utf-8 -*-
 
+from colour import Color
 from copy import deepcopy
+from math import exp
 from PIL import Image
 from PIL import ImageDraw
-from colour import Color
 import re
 
 class StaticMap(object):
@@ -32,6 +33,8 @@ class StaticMap(object):
         Return if one field is going to be expanded or not based on location and value.
     field_exist(field)
         Check if the position of the field is in the map range.
+    calc_static_value(row, col, individual_KS)
+        Calculate the static value of a field based in an individual.
     draw_static_map(diretorio)
         Draw the static map using a range of colors from red to blue.
 
@@ -55,13 +58,13 @@ class StaticMap(object):
 
     # Directions Constant
     D_TOP = (-1, 0, 1)
-    D_TOP_LEFT = (-1, -1, 1.5)
     D_TOP_RIGHT = (-1, 1, 1.5)
-    D_LEFT = (0, -1, 1)
     D_RIGHT = (0, 1, 1)
+    D_BOTTOM_RIGHT = (1, 1, 1.5)
     D_BOTTOM = (1, 0, 1)
     D_BOTTOM_LEFT = (1, -1, 1.5)
-    D_BOTTOM_RIGHT = (1, 1, 1.5)
+    D_LEFT = (0, -1, 1)
+    D_TOP_LEFT = (-1, -1, 1.5)
 
     def __init__(self, label):
         self.label = label
@@ -112,13 +115,11 @@ class StaticMap(object):
         while fifo_list:
             field = fifo_list.pop(0)  
 
-            for direction in ([self.D_TOP, self.D_TOP_LEFT, self.D_TOP_RIGHT, self.D_LEFT, self.D_RIGHT, self.D_BOTTOM, self.D_BOTTOM_LEFT, self.D_BOTTOM_RIGHT]):
+            for direction in ([self.D_TOP, self.D_TOP_RIGHT, self.D_RIGHT, self.D_BOTTOM_RIGHT, self.D_BOTTOM, self.D_BOTTOM_LEFT, self.D_LEFT, self.D_TOP_LEFT]):
                 new_field = (field[0] + direction[0], field[1] + direction[1], field[2] + direction[2])
                 if (self.is_expansible(new_field)):
                     fifo_list.append(new_field)
                     self.map[new_field[0]][new_field[1]] = new_field[2]
-
-        self.draw_static_map("")
         
     def is_expansible(self, field):
         """Return if one field is going to be expanded or not based on location and value.
@@ -160,6 +161,24 @@ class StaticMap(object):
             return False
         return True
 
+    def calc_static_value(self, row, col, individual_KS):
+        """Calculate the static value of a field based in an individual.
+
+        Parameters
+        ----------
+        row : int
+            The row of the field that is going to be calculated the static value.
+        col : int
+            The col of the field that is going to be calculated the static value.
+        individual_KS: float
+            The static map constant of an individual.
+        Returns
+        -------
+        float
+            Returns the value based in the individual_KS and the new location.
+        """
+        return exp(individual_KS * -self.map[row][col])
+
     def draw_static_map(self, directory):
         """Draw the static map using a range of colors from red to blue.
 
@@ -167,7 +186,7 @@ class StaticMap(object):
         ----------
         directory : str
             Contain the directory that the image will be saved
-        """ 
+        """
         white = (255, 255, 255)
         black = (0, 0, 0)
         red = (255, 0, 0)
