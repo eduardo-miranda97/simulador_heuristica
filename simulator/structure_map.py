@@ -2,7 +2,7 @@
 
 class StructureMap(object):
 
-    # Map Constant
+    # Object Map Constant
     M_EMPTY = 0
     M_WALL = 1
     M_DOOR = 2

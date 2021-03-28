@@ -3,6 +3,7 @@
 from colour import Color
 from copy import deepcopy
 from math import exp
+from pathlib import Path
 from PIL import Image
 from PIL import ImageDraw
 import re
@@ -44,7 +45,7 @@ class StaticMap(object):
         Luiz E. Pereira <luizedupereira000@gmail.com>
     """
 
-    # Map Constant
+    # Object Map Constant
     M_EMPTY = 0
     M_WALL = 1
     M_DOOR = 2
@@ -217,5 +218,6 @@ class StaticMap(object):
                     if color == (255,0,0):
                         color = (0,0,255)
                     draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), color, black)
-        image_name = self.label + "_static-field.png"
+        Path(directory).mkdir(parents=True, exist_ok=True)
+        image_name = directory + "/" + self.label + "_static-field.png"
         image.save(image_name)
