@@ -6,7 +6,6 @@ class Individual(object):
         self.label = configuration["label"]
         self.red = configuration["red"]
         self.green = configuration["green"]
-        self.red = configuration["red"]
         self.blue = configuration["blue"]
         self.speed = configuration["speed"]
         self.KD = configuration["KD"] # Dinamic map const
@@ -18,3 +17,8 @@ class Individual(object):
         self.row = row
         self.leave = False
         self.spent_iterations = 0
+
+    def __str__(self):
+        string = f"Label: {self.label}\t R:{self.red}\t G:{self.green}\t B:{self.blue}\t Speed:{self.speed}\t"
+        string += f"KD: {self.KD}\t KS:{self.KS}\t KW:{self.KW}\t KI:{self.KI}\t KD:{self.KD}"
+        return string

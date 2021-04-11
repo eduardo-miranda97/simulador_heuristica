@@ -50,7 +50,6 @@ class WallMap(object):
     M_PERSON = 5
     M_OBJECT = 6
     M_VOID = 8
-    M_PLACEBO = 9
 
     # Directions Constant
     D_TOP = (-1, 0, 1)
@@ -86,9 +85,9 @@ class WallMap(object):
             wall_map_row = []
             for j in range(self.len_col):
                 if (structure_map.map[i][j] == self.M_DOOR or structure_map.map[i][j] == self.M_WALL): # If it is a DOOR or WALL
-                    walls.append([i, j, 0])
+                    self.wall_direction(structure_map, walls, i, j)
                     wall_map_row.append(0)
-                elif (structure_map.map[i][j] == self.M_EMPTY or structure_map.map[i][j] == self.M_VOID or structure_map.map[i][j] == self.M_PLACEBO):
+                elif (structure_map.map[i][j] == self.M_EMPTY or structure_map.map[i][j] == self.M_VOID):
                     wall_map_row.append(self.M_EMPTY)
             self.map.append(wall_map_row)
 
@@ -97,6 +96,37 @@ class WallMap(object):
             for j in range(self.len_col):
                 if (structure_map.map[i][j] == self.M_DOOR or structure_map.map[i][j] == self.M_WALL): # If it is a DOOR or WALL
                     self.map[i][j] = 0
+
+    def wall_direction(self, structure_map, walls, i, j):
+        """Check in each direction if it needs to be expanded.
+
+        Parameters
+        ----------
+        structure_map : StructureMap
+            The structure map that contains the informations of the map.
+        walls : List of tuple
+            Defines the position, inicial value and direction that a wall need to be expanded.
+        i : int
+            X axis position.
+        j : int
+            Y axis position.
+        """
+        if (structure_map.map[i - 1][j] == self.M_EMPTY or structure_map.map[i - 1][j] == self.M_VOID): # TOP
+            walls.append([i, j, 0, self.D_TOP])
+        if ((structure_map.map[i - 1][j] == self.M_EMPTY or structure_map.map[i - 1][j] == self.M_VOID) and (structure_map.map[i][j + 1] == self.M_EMPTY or structure_map.map[i][j + 1] == self.M_VOID)): # TOP RIGHT
+            walls.append([i, j, 0, self.D_TOP_RIGHT])
+        if (structure_map.map[i][j + 1] == self.M_EMPTY or structure_map.map[i][j + 1] == self.M_VOID): # RIGHT
+            walls.append([i, j, 0, self.D_RIGHT])
+        if ((structure_map.map[i + 1][j] == self.M_EMPTY or structure_map.map[i + 1][j] == self.M_VOID) and (structure_map.map[i][j + 1] == self.M_EMPTY or structure_map.map[i][j + 1] == self.M_VOID)): # BOTTOM RIGHT
+            walls.append([i, j, 0, self.D_BOTTOM_RIGHT])
+        if (structure_map.map[i + 1][j] == self.M_EMPTY or structure_map.map[i + 1][j] == self.M_VOID): # BOTTOM
+            walls.append([i, j, 0, self.D_BOTTOM])
+        if ((structure_map.map[i + 1][j] == self.M_EMPTY or structure_map.map[i + 1][j] == self.M_VOID) and (structure_map.map[i][j - 1] == self.M_EMPTY or structure_map.map[i][j - 1] == self.M_VOID)): # BOTTOM LEFT
+            walls.append([i, j, 0, self.D_BOTTOM_LEFT])
+        if (structure_map.map[i][j - 1] == self.M_EMPTY or structure_map.map[i][j - 1] == self.M_VOID): # LEFT
+            walls.append([i, j, 0, self.D_LEFT])
+        if ((structure_map.map[i - 1][j] == self.M_EMPTY or structure_map.map[i - 1][j] == self.M_VOID) and (structure_map.map[i][j - 1] == self.M_EMPTY or structure_map.map[i][j - 1] == self.M_VOID)): # TOP LEFT
+            walls.append([i, j, 0, self.D_TOP_LEFT])
 
     def calc_wall_field(self, walls):
         """After the wall map be pre constructed the real values are calculed using 
@@ -113,12 +143,26 @@ class WallMap(object):
         while fifo_list:
             field = fifo_list.pop(0)  
 
-            for direction in ([self.D_TOP, self.D_TOP_RIGHT, self.D_RIGHT, self.D_BOTTOM_RIGHT, self.D_BOTTOM, self.D_BOTTOM_LEFT, self.D_LEFT, self.D_TOP_LEFT]):
-                new_field = (field[0] + direction[0], field[1] + direction[1], field[2] + direction[2])
-                if (self.is_expansible(new_field)):
-                    fifo_list.append(new_field)
-                    self.map[new_field[0]][new_field[1]] = new_field[2]
-        
+            new_field = (field[0] + field[3][0], field[1] + field[3][1], field[2] + field[3][2], field[3])
+            if (self.is_expansible(new_field)):
+                fifo_list.append(new_field)
+                self.map[new_field[0]][new_field[1]] = new_field[2]
+
+            # If the position is a diagonal, is necessary to expand to two more directions
+            if (field[3] == self.D_TOP_RIGHT):
+                fifo_list.append((field[0], field[1], field[2], self.D_TOP))
+                fifo_list.append((field[0], field[1], field[2], self.D_RIGHT))
+            if (field[3] == self.D_BOTTOM_RIGHT):
+                fifo_list.append((field[0], field[1], field[2], self.D_BOTTOM))
+                fifo_list.append((field[0], field[1], field[2], self.D_RIGHT))
+            if (field[3] == self.D_BOTTOM_LEFT):
+                fifo_list.append((field[0], field[1], field[2], self.D_BOTTOM))
+                fifo_list.append((field[0], field[1], field[2], self.D_LEFT))
+            if (field[3] == self.D_TOP_LEFT):
+                fifo_list.append((field[0], field[1], field[2], self.D_TOP))
+                fifo_list.append((field[0], field[1], field[2], self.D_LEFT))            
+
+
     def is_expansible(self, field):
         """Return if one field is going to be expanded or not based on location and value.
 
@@ -175,7 +219,7 @@ class WallMap(object):
         """
         return exp(individual_KW * numpy.min([Util.DMax, self.map[row][col]]))
 
-    def draw_wall_map(self, directory):
+    def draw_wall_map(self, directory, structure_map):
         """Draw the wall map using a range of colors from red to blue.
 
         Parameters

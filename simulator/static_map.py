@@ -52,7 +52,6 @@ class StaticMap(object):
     M_PERSON = 5
     M_OBJECT = 6
     M_VOID = 8
-    M_PLACEBO = 9
     
     # Static Field Constant
     S_WALL = 9999
@@ -95,7 +94,7 @@ class StaticMap(object):
                     static_map_row.append(1)
                 elif (structure_map.map[i][j] == self.M_WALL or structure_map.map[i][j] == self.M_VOID): # If it is a WALL or VOID
                     static_map_row.append(self.S_WALL)
-                elif (structure_map.map[i][j] == self.M_EMPTY or structure_map.map[i][j] == self.M_PLACEBO):
+                elif (structure_map.map[i][j] == self.M_EMPTY):
                     static_map_row.append(self.M_EMPTY)
             self.map.append(static_map_row)
 

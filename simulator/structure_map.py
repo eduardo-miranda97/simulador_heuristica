@@ -10,7 +10,6 @@ class StructureMap(object):
     M_PERSON = 5
     M_OBJECT = 6
     M_VOID = 8
-    M_PLACEBO = 9
 
     def __init__(self, label, path):
         self.label = label
