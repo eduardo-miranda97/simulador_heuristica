@@ -36,7 +36,7 @@ class StaticMap(object):
         Check if the position of the field is in the map range.
     calc_static_value(row, col, individual_KS)
         Calculate the static value of a field based in an individual.
-    draw_static_map(diretorio)
+    draw_static_map(directory)
         Draw the static map using a range of colors from red to blue.
 
     Authors
@@ -49,7 +49,7 @@ class StaticMap(object):
     M_EMPTY = 0
     M_WALL = 1
     M_DOOR = 2
-    M_PERSON = 5
+    M_INDIVIDUAL = 5
     M_OBJECT = 6
     M_VOID = 8
     

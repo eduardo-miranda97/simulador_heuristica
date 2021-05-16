@@ -7,7 +7,7 @@ class StructureMap(object):
     M_WALL = 1
     M_DOOR = 2
     M_INVISIVEL = 3
-    M_PERSON = 5
+    M_INDIVIDUAL = 5
     M_OBJECT = 6
     M_VOID = 8
 

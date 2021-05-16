@@ -15,8 +15,8 @@ class Individual(object):
 
         self.col = col
         self.row = row
-        self.leave = False
-        self.spent_iterations = 0
+        self.evacuated = False
+        self.steps = 0
 
     def __str__(self):
         string = f"Label: {self.label}\t R:{self.red}\t G:{self.green}\t B:{self.blue}\t Speed:{self.speed}\t"

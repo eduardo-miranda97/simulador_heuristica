@@ -47,7 +47,7 @@ class WallMap(object):
     M_EMPTY = 0
     M_WALL = 1
     M_DOOR = 2
-    M_PERSON = 5
+    M_INDIVIDUAL = 5
     M_OBJECT = 6
     M_VOID = 8
 

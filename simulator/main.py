@@ -32,13 +32,18 @@ if __name__ == "__main__":
     static_map.load_static_map(structure_map)
     if (args.draw):
         static_map.draw_static_map("../output/" + args.experiment)
-
-    # p.disable()
-    # pstats.Stats(p).sort_stats('cumulative').print_stats(30)
         
-    pessoas = []
+    individuals = []
     with open("../input/" + args.experiment + "/individuals.json", 'r') as json_file:
         data = json.load(json_file)
         for caracterization in data['caracterizations']:
             for _ in range(caracterization['amount']):
-                pessoas.append(Individual(caracterization, 0, 0))
+                individuals.append(Individual(caracterization, 0, 0))
+
+    # CROWD MAP
+
+    # SIMULATOR
+
+
+    # p.disable()
+    # pstats.Stats(p).sort_stats('cumulative').print_stats(30)
