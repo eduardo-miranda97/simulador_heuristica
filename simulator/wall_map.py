@@ -28,13 +28,13 @@ class WallMap(object):
 
     Methods
     -------
-    load_wall_map(structure_map)
+    load_map(structure_map)
         Based on the structure map the wall map is started to be constructed.
     nearest_wall_distance(structure_map, row, col)
         Return the distance of the nearest wall of a specific field in the map.
     calc_wall_value(row, col, individual_KW):
         Calculate the wall value of a field based in an individual.
-    draw_wall_map(directory):
+    draw_map(directory):
         Draw the wall map using a range of colors from red to blue.
 
     Authors
@@ -67,7 +67,7 @@ class WallMap(object):
         self.len_row = 0
         self.len_col = 0
 
-    def load_wall_map(self, structure_map):
+    def load_map(self, structure_map):
         """Based on the structure map the wall map is started to be constructed.
 
         Parameters
@@ -219,7 +219,7 @@ class WallMap(object):
         """
         return exp(individual_KW * numpy.min([Util.DMax, self.map[row][col]]))
 
-    def draw_wall_map(self, directory, structure_map):
+    def draw_map(self, directory, structure_map):
         """Draw the wall map using a range of colors from red to blue.
 
         Parameters

@@ -5,6 +5,7 @@ import cProfile as profile
 import json
 import pstats
 
+from crowd_map import CrowdMap
 from individual import Individual
 from static_map import StaticMap
 from structure_map import StructureMap
@@ -24,14 +25,14 @@ if __name__ == "__main__":
     structure_map.load_map()
 
     wall_map = WallMap(args.experiment)
-    wall_map.load_wall_map(structure_map)
+    wall_map.load_map(structure_map)
     if (args.draw):
-        wall_map.draw_wall_map("../output/" + args.experiment, structure_map)
+        wall_map.draw_map("../output/" + args.experiment, structure_map)
 
     static_map = StaticMap(args.experiment)
-    static_map.load_static_map(structure_map)
+    static_map.load_map(structure_map)
     if (args.draw):
-        static_map.draw_static_map("../output/" + args.experiment)
+        static_map.draw_map("../output/" + args.experiment)
         
     individuals = []
     with open("../input/" + args.experiment + "/individuals.json", 'r') as json_file:
@@ -40,7 +41,10 @@ if __name__ == "__main__":
             for _ in range(caracterization['amount']):
                 individuals.append(Individual(caracterization, 0, 0))
 
-    # CROWD MAP
+    crowd_map = CrowdMap(args.experiment)
+    crowd_map.load_map(structure_map, individuals)
+    if (args.draw):
+        crowd_map.draw_map("../output/" + args.experiment, structure_map, individuals)
 
     # SIMULATOR
 

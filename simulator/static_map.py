@@ -26,7 +26,7 @@ class StaticMap(object):
 
     Methods
     -------
-    load_static_map(structure_map)
+    load_map(structure_map)
         Based on the structure map the static map is started to be constructed.
     calc_static_field(exit_gates)
         After the static map be pre constructed the real values are calculed using a recursion principle based in FIFO lists.
@@ -36,7 +36,7 @@ class StaticMap(object):
         Check if the position of the field is in the map range.
     calc_static_value(row, col, individual_KS)
         Calculate the static value of a field based in an individual.
-    draw_static_map(directory)
+    draw_map(directory)
         Draw the static map using a range of colors from red to blue.
 
     Authors
@@ -72,7 +72,7 @@ class StaticMap(object):
         self.len_row = 0
         self.len_col = 0
 
-    def load_static_map(self, structure_map):
+    def load_map(self, structure_map):
         """Based on the structure map the static map is started to be constructed.
 
         Parameters
@@ -179,7 +179,7 @@ class StaticMap(object):
         """
         return exp(individual_KS * -self.map[row][col])
 
-    def draw_static_map(self, directory):
+    def draw_map(self, directory):
         """Draw the static map using a range of colors from red to blue.
 
         Parameters
@@ -190,7 +190,6 @@ class StaticMap(object):
         white = (255, 255, 255)
         black = (0, 0, 0)
         red = (255, 0, 0)
-        gray = (192, 192, 192)
         field_size = 20
         image = Image.new("RGB", (field_size * self.len_col, field_size * self.len_row), white)
         draw = ImageDraw.Draw(image)
