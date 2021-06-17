@@ -4,23 +4,14 @@
 from random import randint
 from numpy import random
 from copy import deepcopy
-from Individuo import Individuo
 from tkinter import Frame
-from Util import Util
-from Mapa import Mapa
-from Logs import Logs
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
-
 import os
 import datetime
 import time
 
-#from PIL import Image
-#from PIL import ImageDraw
-#from tkinter import Button
-#from tkinter import Canvas
-#import time
+from Individuo import Individuo
 
 class Simulator(Object):
 

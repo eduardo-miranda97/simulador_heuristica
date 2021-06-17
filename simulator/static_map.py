@@ -8,34 +8,46 @@ from PIL import Image
 from PIL import ImageDraw
 import re
 
+from constants import Constants
+
 class StaticMap(object):
     """Responsable to calc the distance from the exit doors for each field in the map.
 
-    ...
 
     Attributes
     ----------
     label : str
         The name of the static map.
+
+    structure_map : StructureMap
+        The structure map contains information about the physical map.
+
     map : list of list of int
         The map with values of static fields.
+
     len_row : int
         The horizontal size of the map.
+
     len_col : int
         The vertical size of the map.
 
     Methods
     -------
-    load_map(structure_map)
+    load_map()
         Based on the structure map the static map is started to be constructed.
+
     calc_static_field(exit_gates)
         After the static map be pre constructed the real values are calculed using a recursion principle based in FIFO lists.
+
     is_expansible(field)
         Return if one field is going to be expanded or not based on location and value.
+
     field_exist(field)
         Check if the position of the field is in the map range.
+
     calc_static_value(row, col, individual_KS)
         Calculate the static value of a field based in an individual.
+
     draw_map(directory)
         Draw the static map using a range of colors from red to blue.
 
@@ -45,57 +57,29 @@ class StaticMap(object):
         Luiz E. Pereira <luizedupereira000@gmail.com>
     """
 
-    # Object Map Constant
-    M_EMPTY = 0
-    M_WALL = 1
-    M_DOOR = 2
-    M_INDIVIDUAL = 5
-    M_OBJECT = 6
-    M_VOID = 8
-    
-    # Static Field Constant
-    S_WALL = 9999
-
-    # Directions Constant
-    D_TOP = (-1, 0, 1)
-    D_TOP_RIGHT = (-1, 1, 1.5)
-    D_RIGHT = (0, 1, 1)
-    D_BOTTOM_RIGHT = (1, 1, 1.5)
-    D_BOTTOM = (1, 0, 1)
-    D_BOTTOM_LEFT = (1, -1, 1.5)
-    D_LEFT = (0, -1, 1)
-    D_TOP_LEFT = (-1, -1, 1.5)
-
-    def __init__(self, label):
+    def __init__(self, label, structure_map):
         self.label = label
+        self.structure_map = structure_map
         self.map = []
-        self.len_row = 0
-        self.len_col = 0
+        self.len_row = structure_map.len_row
+        self.len_col = structure_map.len_col
 
-    def load_map(self, structure_map):
+    def load_map(self):
         """Based on the structure map the static map is started to be constructed.
-
-        Parameters
-        ----------
-        structure_map : StructureMap
-            The structure map that contains the informations of the map.
         """
         self.map = []
         exit_gates = []
 
-        self.len_row = structure_map.len_row
-        self.len_col = structure_map.len_col
-
         for i in range(self.len_row):
             static_map_row = []
             for j in range(self.len_col):
-                if (structure_map.map[i][j] == self.M_DOOR): # If it is a DOOR
+                if (self.structure_map.map[i][j] == Constants.M_DOOR): # If it is a DOOR
                     exit_gates.append([i, j, 1])
                     static_map_row.append(1)
-                elif (structure_map.map[i][j] == self.M_WALL or structure_map.map[i][j] == self.M_VOID): # If it is a WALL or VOID
-                    static_map_row.append(self.S_WALL)
-                elif (structure_map.map[i][j] == self.M_EMPTY):
-                    static_map_row.append(self.M_EMPTY)
+                elif (self.structure_map.map[i][j] == Constants.M_WALL or self.structure_map.map[i][j] == Constants.M_VOID): # If it is a WALL or VOID
+                    static_map_row.append(Constants.S_WALL)
+                elif (self.structure_map.map[i][j] == Constants.M_EMPTY):
+                    static_map_row.append(Constants.M_EMPTY)
             self.map.append(static_map_row)
 
         self.calc_static_field(deepcopy(exit_gates))
@@ -115,7 +99,7 @@ class StaticMap(object):
         while fifo_list:
             field = fifo_list.pop(0)  
 
-            for direction in ([self.D_TOP, self.D_TOP_RIGHT, self.D_RIGHT, self.D_BOTTOM_RIGHT, self.D_BOTTOM, self.D_BOTTOM_LEFT, self.D_LEFT, self.D_TOP_LEFT]):
+            for direction in ([Constants.D_TOP, Constants.D_TOP_RIGHT, Constants.D_RIGHT, Constants.D_BOTTOM_RIGHT, Constants.D_BOTTOM, Constants.D_BOTTOM_LEFT, Constants.D_LEFT, Constants.D_TOP_LEFT]):
                 new_field = (field[0] + direction[0], field[1] + direction[1], field[2] + direction[2])
                 if (self.is_expansible(new_field)):
                     fifo_list.append(new_field)
@@ -136,7 +120,7 @@ class StaticMap(object):
         """
         if (not self.field_exist(field)):
             return False
-        if (self.map[field[0]][field[1]] == self.S_WALL):
+        if (self.map[field[0]][field[1]] == Constants.S_WALL):
             return False
         if (self.map[field[0]][field[1]] <= field[2] and self.map[field[0]][field[1]] != 0):
             return False
@@ -197,13 +181,13 @@ class StaticMap(object):
         greater_value = 0
         for i in range(self.len_row):
             for j in range(self.len_col):
-                if (self.map[i][j] != self.S_WALL and self.map[i][j] > greater_value):
+                if (self.map[i][j] != Constants.S_WALL and self.map[i][j] > greater_value):
                     greater_value = self.map[i][j]
         colors = list(Color("red").range_to(Color("blue"), (int(greater_value) + 1)))
 
         for i in range(self.len_row):
             for j in range(self.len_col):
-                if (self.map[i][j] == self.S_WALL): # Wall or void case
+                if (self.map[i][j] == Constants.S_WALL): # Wall or void case
                     draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), black, black)
                 elif (self.map[i][j] == 1): # Door case
                     draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), red, black)

@@ -1,5 +1,7 @@
 # -*- coding:utf-8 -*-
 
+from constants import Constants
+
 class StructureMap(object):
     """Responsable to store the map fisical informations: doors, walls, etc.
 
@@ -9,12 +11,16 @@ class StructureMap(object):
     ----------
     label : str
         The name of the static map.
+        
     map : list of list of int
         The map with values of static fields.
+
     len_row : int
         The horizontal size of the map.
+
     len_col : int
         The vertical size of the map.
+
     path : str
         Directory path which contains the map file.
 
@@ -22,6 +28,7 @@ class StructureMap(object):
     -------
     load_map()
         Read the map file to construct the structure map.
+
     get_empty_positions()
         Returns a list which contains the empty positions of the structure map.
     
@@ -30,13 +37,6 @@ class StructureMap(object):
         Eduardo Miranda <eduardokira08@gmail.com>
         Luiz E. Pereira <luizedupereira000@gmail.com>
     """
-
-    # Object Map Constant
-    M_EMPTY = 0
-    M_WALL = 1
-    M_DOOR = 2
-    M_OBJECT = 6
-    M_VOID = 8
 
     def __init__(self, label, path):
         self.label = label
@@ -69,6 +69,6 @@ class StructureMap(object):
         empty_positions = []
         for i in range(self.len_row):
             for j in range(self.len_col):
-                if (self.map[i][j] == self.M_EMPTY):
+                if (self.map[i][j] == Constants.M_EMPTY):
                     empty_positions.append((i, j))
         return empty_positions

@@ -9,29 +9,38 @@ from PIL import ImageDraw
 from random import randint
 import re
 
+from constants import Constants
+
 class CrowdMap(object):
     """Responsable to control the individual's location in the map.
 
-    ...
 
     Attributes
     ----------
     label : str
         The name of the crowd map.
+
+    structure_map : StructureMap
+        The structure map contains information about the physical map.
+
     map : list of list of int
         The map with the individual's location.
+
     len_row : int
         The horizontal size of the map.
+
     len_col : int
         The vertical size of the map.
 
     Methods
     -------
-    load_map(structure_map, individuals)
+    load_map(individuals)
         Based on the structure map the crowd map is started to be constructed.
+
     draw_map(directory)
         Draw the crowd map using the individual's location.
-    place_individuals(structure_map, individuals)
+
+    place_individuals(individuals)
         
     Authors
     -------
@@ -39,48 +48,35 @@ class CrowdMap(object):
         Luiz E. Pereira <luizedupereira000@gmail.com>
     """
 
-    # Object Map Constant
-    M_EMPTY = 0
-    M_WALL = 1
-    M_DOOR = 2
-    M_INDIVIDUAL = 5
-    M_OBJECT = 6
-    M_VOID = 8
-
-    def __init__(self, label):
+    def __init__(self, label, structure_map):
         self.label = label
-        self.map = []
-        self.len_row = 0
-        self.len_col = 0
-
-    def load_map(self, structure_map, individuals):
-        """Based on the structure map and individuals, the crowd map is constructed.
-
-        Parameters
-        ----------
-        structure_map : StructureMap
-            The structure map that contains the informations of the map.
-        individuals : list of Individual
-            Contains specific information about individuals.
-        """
+        self.structure_map = structure_map
         self.map = []
         self.len_row = structure_map.len_row
         self.len_col = structure_map.len_col
 
-        self.map = [[0] * self.len_col for _ in range(self.len_row)]
-        self.place_individuals(structure_map, individuals)
+    def load_map(self, individuals):
+        """Based on the structure map and individuals, the crowd map is constructed.
 
-    def place_individuals(self, structure_map, individuals):
+        Parameters
+        ----------
+        individuals : list of Individual
+            Contains specific information about individuals.
+        """
+        self.map = []
+
+        self.map = [[0] * self.len_col for _ in range(self.len_row)]
+        self.place_individuals(individuals)
+
+    def place_individuals(self, individuals):
         """Based on the structure map the individuals are placed in the crowd map.
 
         Parameters
         ----------
-        structure_map : StructureMap
-            The structure map that contains the informations of the map.
         individuals : list of Individual
             Contains specific information about individuals.
         """        
-        empty_positions = structure_map.get_empty_positions()
+        empty_positions = self.structure_map.get_empty_positions()
         for individual in individuals:
             individual.row, individual.col = empty_positions.pop(randint(0, len(empty_positions) - 1))
             self.map[individual.row][individual.col] = individual
@@ -153,15 +149,14 @@ class CrowdMap(object):
 
 
 
-    def draw_map(self, directory, structure_map, individuals):
+    def draw_map(self, directory, individuals):
         """Draw the crowd map using the structe map and the individuals colors.
 
         Parameters
         ----------
         directory : str
-            Contain the directory that the image will be saved
-        structure_map : StructureMap
-            The structure map that contains the informations of the map.
+            Contain the directory that the image will be saved.
+
         individuals : list of Individual
             Contains specific information about individuals.
         """
@@ -175,16 +170,16 @@ class CrowdMap(object):
 
         for i in range(self.len_row):
             for j in range(self.len_col):
-                if (structure_map.map[i][j] == self.M_WALL):
+                if (self.structure_map.map[i][j] == Constants.M_WALL):
                     draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), black, black)
-                elif (structure_map.map[i][j] == self.M_VOID):
+                elif (self.structure_map.map[i][j] == Constants.M_VOID):
                     draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), gray, black)
-                elif (structure_map.map[i][j] == self.M_EMPTY):
+                elif (self.structure_map.map[i][j] == Constants.M_EMPTY):
                     draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), white, black)             
-                elif (structure_map.map[i][j] == self.M_DOOR):
+                elif (self.structure_map.map[i][j] == Constants.M_DOOR):
                     draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), red, black)
         for individual in individuals:
-            if (structure_map.map[individual.row][individual.col] != self.M_DOOR):
+            if (self.structure_map.map[individual.row][individual.col] != Constants.M_DOOR):
                 draw.ellipse((individual.col * field_size, individual.row * field_size, (individual.col + 1) * field_size, (individual.row + 1) * field_size), individual.color, black)
                         
         image_name = directory + "/" + self.label + "_crowd_map.png"

@@ -24,13 +24,13 @@ if __name__ == "__main__":
     structure_map = StructureMap(args.experiment, "../input/" + args.experiment + "/map.txt")
     structure_map.load_map()
 
-    wall_map = WallMap(args.experiment)
-    wall_map.load_map(structure_map)
+    wall_map = WallMap(args.experiment, structure_map)
+    wall_map.load_map()
     if (args.draw):
-        wall_map.draw_map("../output/" + args.experiment, structure_map)
+        wall_map.draw_map("../output/" + args.experiment)
 
-    static_map = StaticMap(args.experiment)
-    static_map.load_map(structure_map)
+    static_map = StaticMap(args.experiment, structure_map)
+    static_map.load_map()
     if (args.draw):
         static_map.draw_map("../output/" + args.experiment)
         
@@ -41,10 +41,10 @@ if __name__ == "__main__":
             for _ in range(caracterization['amount']):
                 individuals.append(Individual(caracterization, 0, 0))
 
-    crowd_map = CrowdMap(args.experiment)
-    crowd_map.load_map(structure_map, individuals)
+    crowd_map = CrowdMap(args.experiment, structure_map)
+    crowd_map.load_map(individuals)
     if (args.draw):
-        crowd_map.draw_map("../output/" + args.experiment, structure_map, individuals)
+        crowd_map.draw_map("../output/" + args.experiment, individuals)
 
     # SIMULATOR
 
