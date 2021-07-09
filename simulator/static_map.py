@@ -76,7 +76,7 @@ class StaticMap(object):
                 if (self.structure_map.map[i][j] == Constants.M_DOOR): # If it is a DOOR
                     exit_gates.append([i, j, 1])
                     static_map_row.append(1)
-                elif (self.structure_map.map[i][j] == Constants.M_WALL or self.structure_map.map[i][j] == Constants.M_VOID): # If it is a WALL or VOID
+                elif (self.structure_map.map[i][j] == Constants.M_WALL or self.structure_map.map[i][j] == Constants.M_OBJECT or self.structure_map.map[i][j] == Constants.M_VOID): # If it is a WALL, OBJECT or VOID
                     static_map_row.append(Constants.S_WALL)
                 elif (self.structure_map.map[i][j] == Constants.M_EMPTY):
                     static_map_row.append(Constants.M_EMPTY)
@@ -171,11 +171,8 @@ class StaticMap(object):
         directory : str
             Contain the directory that the image will be saved
         """
-        white = (255, 255, 255)
-        black = (0, 0, 0)
-        red = (255, 0, 0)
         field_size = 20
-        image = Image.new("RGB", (field_size * self.len_col, field_size * self.len_row), white)
+        image = Image.new("RGB", (field_size * self.len_col, field_size * self.len_row), Constants.C_WHITE)
         draw = ImageDraw.Draw(image)
 
         greater_value = 0
@@ -187,10 +184,14 @@ class StaticMap(object):
 
         for i in range(self.len_row):
             for j in range(self.len_col):
-                if (self.map[i][j] == Constants.S_WALL): # Wall or void case
-                    draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), black, black)
-                elif (self.map[i][j] == 1): # Door case
-                    draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), red, black)
+                if (self.structure_map.map[i][j] == Constants.M_OBJECT):
+                    draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), Constants.C_GRAY, Constants.C_GRAY)
+                elif (self.structure_map.map[i][j] == Constants.M_VOID):
+                    draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), Constants.C_LIGHT_BLACK, Constants.C_LIGHT_BLACK)
+                elif (self.structure_map.map[i][j] == Constants.M_WALL or self.map[i][j] == Constants.S_WALL):
+                    draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), Constants.C_BLACK, Constants.C_BLACK)
+                elif (self.structure_map.map[i][j] == Constants.M_DOOR):
+                    draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), Constants.C_RED, Constants.C_BLACK)
                 else: # Draw or empty case
                     color = str(colors[int(self.map[i][j])].hex)
                     color = re.sub('[#]', '', color)
@@ -199,7 +200,7 @@ class StaticMap(object):
                     color = tuple(int(color[i:i + 2], 16) for i in (0, 2, 4))
                     if color == (255,0,0):
                         color = (0,0,255)
-                    draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), color, black)
+                    draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), color, Constants.C_BLACK)
         Path(directory).mkdir(parents=True, exist_ok=True)
         image_name = directory + "/" + self.label + "_static-field.png"
         image.save(image_name)

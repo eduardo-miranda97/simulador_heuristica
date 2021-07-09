@@ -37,10 +37,11 @@ class CrowdMap(object):
     load_map(individuals)
         Based on the structure map the crowd map is started to be constructed.
 
-    draw_map(directory)
-        Draw the crowd map using the individual's location.
-
     place_individuals(individuals)
+        Based on the structure map the individuals are placed in the crowd map.
+
+    draw_map(directory, iteration)
+        Draw the crowd map using the individual's location.
         
     Authors
     -------
@@ -80,7 +81,11 @@ class CrowdMap(object):
         for individual in individuals:
             individual.row, individual.col = empty_positions.pop(randint(0, len(empty_positions) - 1))
             self.map[individual.row][individual.col] = individual
-        
+
+
+    def free_exit_gates(self):
+        return
+
 
     # def geraIndividuosAleatoriamente(self, individuals):
     #     #ao iniciar uma simulacao gera a posicao individuos em posicoes aleatorioas em mapas aleatorios
@@ -149,7 +154,7 @@ class CrowdMap(object):
 
 
 
-    def draw_map(self, directory, individuals):
+    def draw_map(self, directory, iteration):
         """Draw the crowd map using the structe map and the individuals colors.
 
         Parameters
@@ -157,30 +162,28 @@ class CrowdMap(object):
         directory : str
             Contain the directory that the image will be saved.
 
-        individuals : list of Individual
-            Contains specific information about individuals.
+        iteration : int
+            Number of the iteration.
         """
-        white = (255, 255, 255)
-        black = (0, 0, 0)
-        gray = (192, 192, 192)
-        red = (255, 0, 0)
         field_size = 20
-        image = Image.new("RGB", (field_size * self.len_col, field_size * self.len_row), white)
+        image = Image.new("RGB", (field_size * self.len_col, field_size * self.len_row), Constants.C_WHITE)
         draw = ImageDraw.Draw(image)
 
         for i in range(self.len_row):
             for j in range(self.len_col):
                 if (self.structure_map.map[i][j] == Constants.M_WALL):
-                    draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), black, black)
+                    draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), Constants.C_BLACK, Constants.C_BLACK)
+                elif (self.structure_map.map[i][j] == Constants.M_OBJECT):
+                    draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), Constants.C_GRAY, Constants.C_GRAY)
                 elif (self.structure_map.map[i][j] == Constants.M_VOID):
-                    draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), gray, black)
+                    draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), Constants.C_LIGHT_BLACK, Constants.C_LIGHT_BLACK)
                 elif (self.structure_map.map[i][j] == Constants.M_EMPTY):
-                    draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), white, black)             
+                    draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), Constants.C_WHITE, Constants.C_BLACK)             
                 elif (self.structure_map.map[i][j] == Constants.M_DOOR):
-                    draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), red, black)
-        for individual in individuals:
-            if (self.structure_map.map[individual.row][individual.col] != Constants.M_DOOR):
-                draw.ellipse((individual.col * field_size, individual.row * field_size, (individual.col + 1) * field_size, (individual.row + 1) * field_size), individual.color, black)
-                        
-        image_name = directory + "/" + self.label + "_crowd_map.png"
+                    draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), Constants.C_RED, Constants.C_BLACK)
+                if (self.map[i][j] != 0): # If the field have an individual
+                    if (self.structure_map.map[i][j] != Constants.M_DOOR):
+                        draw.ellipse((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), self.map[i][j].color, Constants.C_BLACK) 
+        
+        image_name = directory + "/" + self.label + "_crowd_map_" + str(iteration) + ".png"
         image.save(image_name)

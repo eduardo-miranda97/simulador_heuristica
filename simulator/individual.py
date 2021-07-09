@@ -16,6 +16,11 @@ class Individual(object):
         self.evacuated = False
         self.steps = 0
 
+
+    def move(self, structure_map, wall_map, static_map, crowd_map, pheromone_map):
+        return
+
+
     # def calculaProbabilidadesMovimentoBruto(self, linha, coluna, individual, campoMov):
     #     if(self.listaMapas[individual.idMapa].qtdSaidasVizinhas(linha, coluna) == 0):  
     #         #superior esquerdo - individual 0

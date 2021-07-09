@@ -7,7 +7,8 @@ class Constants(object):
     M_EMPTY = 0
     M_WALL = 1
     M_DOOR = 2
-    M_VOID = 3
+    M_OBJECT = 3
+    M_VOID = 4
     
     # Static Field Constant
     S_WALL = 9999
@@ -21,3 +22,10 @@ class Constants(object):
     D_BOTTOM_LEFT = (1, -1, 1.5)
     D_LEFT = (0, -1, 1)
     D_TOP_LEFT = (-1, -1, 1.5)
+
+    # Map Colors
+    C_WHITE = (255, 255, 255)
+    C_BLACK = (0, 0, 0)
+    C_GRAY = (75, 75, 75)
+    C_LIGHT_BLACK = (35, 35, 35)
+    C_RED = (255, 0, 0)

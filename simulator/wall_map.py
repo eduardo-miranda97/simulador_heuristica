@@ -12,7 +12,7 @@ import re
 from constants import Constants
 
 class WallMap(object):
-    """Responsable to calc the distance from each field in the map to the closest wall, door or void.
+    """Responsable to calc the distance from each field in the map to the closest wall or door.
 
     Attributes
     ----------
@@ -76,7 +76,7 @@ class WallMap(object):
                 if (self.structure_map.map[i][j] == Constants.M_DOOR or self.structure_map.map[i][j] == Constants.M_WALL): # If it is a DOOR or WALL
                     self.wall_direction(walls, i, j)
                     wall_map_row.append(0)
-                elif (self.structure_map.map[i][j] == Constants.M_EMPTY or self.structure_map.map[i][j] == Constants.M_VOID):
+                elif (self.structure_map.map[i][j] == Constants.M_EMPTY or self.structure_map.map[i][j] == Constants.M_OBJECT or self.structure_map.map[i][j] == Constants.M_VOID):
                     wall_map_row.append(Constants.M_EMPTY)
             self.map.append(wall_map_row)
 
@@ -100,21 +100,21 @@ class WallMap(object):
         j : int
             Y axis position.
         """
-        if (self.structure_map.map[i - 1][j] == Constants.M_EMPTY or self.structure_map.map[i - 1][j] == Constants.M_VOID): # TOP
+        if (self.structure_map.map[i - 1][j] == Constants.M_EMPTY or self.structure_map.map[i - 1][j] == Constants.M_OBJECT): # TOP
             walls.append([i, j, 0, Constants.D_TOP])
-        if ((self.structure_map.map[i - 1][j] == Constants.M_EMPTY or self.structure_map.map[i - 1][j] == Constants.M_VOID) and (self.structure_map.map[i][j + 1] == Constants.M_EMPTY or self.structure_map.map[i][j + 1] == Constants.M_VOID)): # TOP RIGHT
+        if ((self.structure_map.map[i - 1][j] == Constants.M_EMPTY or self.structure_map.map[i - 1][j] == Constants.M_OBJECT) and (self.structure_map.map[i][j + 1] == Constants.M_EMPTY or self.structure_map.map[i][j + 1] == Constants.M_OBJECT)): # TOP RIGHT
             walls.append([i, j, 0, Constants.D_TOP_RIGHT])
-        if (self.structure_map.map[i][j + 1] == Constants.M_EMPTY or self.structure_map.map[i][j + 1] == Constants.M_VOID): # RIGHT
+        if (self.structure_map.map[i][j + 1] == Constants.M_EMPTY or self.structure_map.map[i][j + 1] == Constants.M_OBJECT): # RIGHT
             walls.append([i, j, 0, Constants.D_RIGHT])
-        if ((self.structure_map.map[i + 1][j] == Constants.M_EMPTY or self.structure_map.map[i + 1][j] == Constants.M_VOID) and (self.structure_map.map[i][j + 1] == Constants.M_EMPTY or self.structure_map.map[i][j + 1] == Constants.M_VOID)): # BOTTOM RIGHT
+        if ((self.structure_map.map[i + 1][j] == Constants.M_EMPTY or self.structure_map.map[i + 1][j] == Constants.M_OBJECT) and (self.structure_map.map[i][j + 1] == Constants.M_EMPTY or self.structure_map.map[i][j + 1] == Constants.M_OBJECT)): # BOTTOM RIGHT
             walls.append([i, j, 0, Constants.D_BOTTOM_RIGHT])
-        if (self.structure_map.map[i + 1][j] == Constants.M_EMPTY or self.structure_map.map[i + 1][j] == Constants.M_VOID): # BOTTOM
+        if (self.structure_map.map[i + 1][j] == Constants.M_EMPTY or self.structure_map.map[i + 1][j] == Constants.M_OBJECT): # BOTTOM
             walls.append([i, j, 0, Constants.D_BOTTOM])
-        if ((self.structure_map.map[i + 1][j] == Constants.M_EMPTY or self.structure_map.map[i + 1][j] == Constants.M_VOID) and (self.structure_map.map[i][j - 1] == Constants.M_EMPTY or self.structure_map.map[i][j - 1] == Constants.M_VOID)): # BOTTOM LEFT
+        if ((self.structure_map.map[i + 1][j] == Constants.M_EMPTY or self.structure_map.map[i + 1][j] == Constants.M_OBJECT) and (self.structure_map.map[i][j - 1] == Constants.M_EMPTY or self.structure_map.map[i][j - 1] == Constants.M_OBJECT)): # BOTTOM LEFT
             walls.append([i, j, 0, Constants.D_BOTTOM_LEFT])
-        if (self.structure_map.map[i][j - 1] == Constants.M_EMPTY or self.structure_map.map[i][j - 1] == Constants.M_VOID): # LEFT
+        if (self.structure_map.map[i][j - 1] == Constants.M_EMPTY or self.structure_map.map[i][j - 1] == Constants.M_OBJECT): # LEFT
             walls.append([i, j, 0, Constants.D_LEFT])
-        if ((self.structure_map.map[i - 1][j] == Constants.M_EMPTY or self.structure_map.map[i - 1][j] == Constants.M_VOID) and (self.structure_map.map[i][j - 1] == Constants.M_EMPTY or self.structure_map.map[i][j - 1] == Constants.M_VOID)): # TOP LEFT
+        if ((self.structure_map.map[i - 1][j] == Constants.M_EMPTY or self.structure_map.map[i - 1][j] == Constants.M_OBJECT) and (self.structure_map.map[i][j - 1] == Constants.M_EMPTY or self.structure_map.map[i][j - 1] == Constants.M_OBJECT)): # TOP LEFT
             walls.append([i, j, 0, Constants.D_TOP_LEFT])
 
     def calc_wall_field(self, walls):
@@ -218,12 +218,8 @@ class WallMap(object):
         directory : str
             Contain the directory that the image will be saved
         """
-        white = (255, 255, 255)
-        black = (0, 0, 0)
-        red = (255, 0, 0)
-        gray = (192, 192, 192)
         field_size = 20
-        image = Image.new("RGB", (field_size * self.len_col, field_size * self.len_row), white)
+        image = Image.new("RGB", (field_size * self.len_col, field_size * self.len_row), Constants.C_WHITE)
         draw = ImageDraw.Draw(image)
 
         greater_value = 0
@@ -235,8 +231,12 @@ class WallMap(object):
 
         for i in range(self.len_row):
             for j in range(self.len_col):
-                if (self.map[i][j] == 0): # Wall, void or door case
-                    draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), black, black)
+                if (self.structure_map.map[i][j] == Constants.M_WALL or self.structure_map.map[i][j] == Constants.M_DOOR):
+                    draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), Constants.C_BLACK, Constants.C_BLACK)
+                elif (self.structure_map.map[i][j] == Constants.M_OBJECT):
+                    draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), Constants.C_GRAY, Constants.C_GRAY)
+                elif (self.structure_map.map[i][j] == Constants.M_VOID):
+                    draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), Constants.C_LIGHT_BLACK, Constants.C_LIGHT_BLACK)
                 else:
                     color = str(colors[int(self.map[i][j])].hex)
                     color = re.sub('[#]', '', color)
@@ -245,7 +245,7 @@ class WallMap(object):
                     color = tuple(int(color[i:i + 2], 16) for i in (0, 2, 4))
                     if color == (255,0,0):
                         color = (0,0,255)
-                    draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), color, black)
+                    draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), color, Constants.C_BLACK)
         Path(directory).mkdir(parents=True, exist_ok=True)
         image_name = directory + "/" + self.label + "_wall_map.png"
         image.save(image_name)
