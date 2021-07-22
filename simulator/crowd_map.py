@@ -82,43 +82,44 @@ class CrowdMap(object):
             individual.row, individual.col = empty_positions.pop(randint(0, len(empty_positions) - 1))
             self.map[individual.row][individual.col] = individual
 
+    def check_empty_position(self, row, col):
+        """Check if a position in the map is empty
+
+        Parameters
+        ----------
+        row : int
+            Row index.
+        col : int
+            Column index.
+            
+        Returns
+        -------
+        boolean
+            Returns True for empty position
+        """
+        if (self.map[row][col] == 0):
+            return True
+        return False
+
+    def update_individual_position(self, original_row, original_col, new_row, new_col):
+        """Update the position of an individual
+
+        Parameters
+        ----------
+        original_row : int
+            Row of the map that the individual was.
+        original_col : int
+            Column of the map that the individual was.
+        new_row : int
+            Row of the map that the individual will be.
+        new_col : int
+            Column of the map that the individual will be.
+        """  
+        self.map[new_row][new_col] = self.map[original_row][original_row]
+        self.map[original_row][original_row] = 0
 
     def free_exit_gates(self):
         return
-
-
-    # def geraIndividuosAleatoriamente(self, individuals):
-    #     #ao iniciar uma simulacao gera a posicao individuos em posicoes aleatorioas em mapas aleatorios
-    #     #print("Carregando "+str(self.dados.QTD_PESSOAS)+" Individuos Aleatoriamente")
-        
-    #     for i in range(self.dados.QTD_PESSOAS):
-
-    #         idMapa = randint(0, self.listaMapas.__len__()-1)
-    #         coluna = randint(0, self.listaMapas[idMapa].tam_colunas-1)
-    #         linha  = randint(0, self.listaMapas[idMapa].tam_linhas-1)
-            
-    #         while(not self.verificaPosicaoVazia(idMapa, coluna, linha)):
-    #             idMapa = randint(0, self.listaMapas.__len__()-1)
-    #             coluna = randint(0, self.listaMapas[idMapa].tam_colunas-1)
-    #             linha = randint(0, self.listaMapas[idMapa].tam_linhas-1)
-
-    #         self.listaIndividuos[i].posicionaIndividuoMapa(coluna, linha, idMapa)
-
-    #         #self.listaMapas[idMapa].mapa_individuo[linha][coluna] = Util.M_INDIVIDUO
-            
-    #         #print("Individuo Gerado | Mapa: " + str(idMapa) + " Linha: " + str(linha) + " Coluna: " + str(coluna))
-    #     #self.listaIndividuosInicial.append(deepcopy(self.listaIndividuos))
-    #     #for i in range(self.dados.DIRETORIO_MAPAS.__len__()):
-    #         #self.listaMapasIndividuosInicial.append(deepcopy(self.listaMapas[i].mapa_individuo))
-    #         #print("Mapa: "+ str(i))
-    #         #self.listaMapas[i].imprimeMapaIndividuo()
-    #         #self.listaMapas[i].imprimeMapaParedes()
-    
-    # def atribuiMapaIndividuoInicial(self):
-        
-    #     for ind in self.listaIndividuos:
-    #         self.listaMapas[ind.idMapa].mapa_individuo[ind.linha][ind.coluna] = Util.M_INDIVIDUO
-
 
     
     # ''' Funcao que vai fazer o movimento do individuo, chamara a propria funcao do individuo
