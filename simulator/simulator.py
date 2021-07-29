@@ -15,13 +15,13 @@ class Simulator(object):
 
     MAX_ITERATIONS = 1200
 
-    def __init__(self, structure_map, wall_map, static_map, crowd_map, pheromone_map, individuals, directory):
+    def __init__(self, structure_map, wall_map, static_map, crowd_map, dinamic_map, individuals, directory):
 
         self.structure_map = structure_map
         self.wall_map = wall_map
         self.static_map = static_map
         self.crowd_map = crowd_map
-        self.pheromone_map = pheromone_map
+        self.dinamic_map = dinamic_map
         self.individuals = individuals
         self.directory = directory # *********************************************
         self.iteration = 0
@@ -31,7 +31,7 @@ class Simulator(object):
     def simulate(self):
         while (not self.check_evacuated_individuals() and self.iteration < self.MAX_ITERATIONS):
             self.crowd_map.draw_map("../output/" + self.directory, self.individuals, self.iteration)
-            self.pheromone_map.draw_map(self.directory, self.iteration)
+            self.dinamic_map.draw_map(self.directory, self.iteration)
             self.iteration += 1
 
             self.sort_individuals_by_distance()
@@ -42,7 +42,7 @@ class Simulator(object):
                 if (not individual.evacuated):
                     if (individual.steps == individual.speed):
 
-                        self.individual.move(self.structure_map, self.wall_map, self.static_map, self.crowd_map, self.pheromone_map)
+                        self.individual.move(self.structure_map, self.wall_map, self.static_map, self.crowd_map, self.dinamic_map)
 
                         if(self.structure_map.isSaida(individual.row, individual.col)):
                             individual.evacuated = True
@@ -53,7 +53,7 @@ class Simulator(object):
             self.crowd_map.free_exit_gates()
 
             # After the iteration it's recalculed the pheromone map
-            self.pheromone_map.difusion_decay()
+            self.dinamic_map.difusion_decay()
 
         return self.iteration
     

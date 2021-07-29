@@ -73,17 +73,17 @@ class WallMap(object):
         for i in range(self.len_row):
             wall_map_row = []
             for j in range(self.len_col):
-                if (self.structure_map.map[i][j] == Constants.M_DOOR or self.structure_map.map[i][j] == Constants.M_WALL): # If it is a DOOR or WALL
+                if (self.structure_map.map[i][j] == Constants.M_WALL or self.structure_map.map[i][j] == Constants.M_OBJECT):
                     self.wall_direction(walls, i, j)
                     wall_map_row.append(0)
-                elif (self.structure_map.map[i][j] == Constants.M_EMPTY or self.structure_map.map[i][j] == Constants.M_OBJECT or self.structure_map.map[i][j] == Constants.M_VOID):
+                elif (self.structure_map.map[i][j] == Constants.M_EMPTY or self.structure_map.map[i][j] == Constants.M_DOOR or self.structure_map.map[i][j] == Constants.M_OBJECT or self.structure_map.map[i][j] == Constants.M_VOID):
                     wall_map_row.append(Constants.M_EMPTY)
             self.map.append(wall_map_row)
 
         self.calc_wall_field(deepcopy(walls))
         for i in range(self.len_row):
             for j in range(self.len_col):
-                if (self.structure_map.map[i][j] == Constants.M_DOOR or self.structure_map.map[i][j] == Constants.M_WALL): # If it is a DOOR or WALL
+                if (self.structure_map.map[i][j] == Constants.M_WALL or self.structure_map.map[i][j] == Constants.M_OBJECT):
                     self.map[i][j] = 0
 
     def wall_direction(self, walls, i, j):
@@ -100,21 +100,21 @@ class WallMap(object):
         j : int
             Y axis position.
         """
-        if (self.structure_map.map[i - 1][j] == Constants.M_EMPTY or self.structure_map.map[i - 1][j] == Constants.M_OBJECT): # TOP
+        if (self.structure_map.map[i - 1][j] == Constants.M_EMPTY or self.structure_map.map[i - 1][j] == Constants.M_DOOR): # TOP
             walls.append([i, j, 0, Constants.D_TOP])
-        if ((self.structure_map.map[i - 1][j] == Constants.M_EMPTY or self.structure_map.map[i - 1][j] == Constants.M_OBJECT) and (self.structure_map.map[i][j + 1] == Constants.M_EMPTY or self.structure_map.map[i][j + 1] == Constants.M_OBJECT)): # TOP RIGHT
+        if ((self.structure_map.map[i - 1][j] == Constants.M_EMPTY or self.structure_map.map[i - 1][j] == Constants.M_DOOR) and (self.structure_map.map[i][j + 1] == Constants.M_EMPTY or self.structure_map.map[i][j + 1] == Constants.M_DOOR)): # TOP RIGHT
             walls.append([i, j, 0, Constants.D_TOP_RIGHT])
-        if (self.structure_map.map[i][j + 1] == Constants.M_EMPTY or self.structure_map.map[i][j + 1] == Constants.M_OBJECT): # RIGHT
+        if (self.structure_map.map[i][j + 1] == Constants.M_EMPTY or self.structure_map.map[i][j + 1] == Constants.M_DOOR): # RIGHT
             walls.append([i, j, 0, Constants.D_RIGHT])
-        if ((self.structure_map.map[i + 1][j] == Constants.M_EMPTY or self.structure_map.map[i + 1][j] == Constants.M_OBJECT) and (self.structure_map.map[i][j + 1] == Constants.M_EMPTY or self.structure_map.map[i][j + 1] == Constants.M_OBJECT)): # BOTTOM RIGHT
+        if ((self.structure_map.map[i + 1][j] == Constants.M_EMPTY or self.structure_map.map[i + 1][j] == Constants.M_DOOR) and (self.structure_map.map[i][j + 1] == Constants.M_EMPTY or self.structure_map.map[i][j + 1] == Constants.M_DOOR)): # BOTTOM RIGHT
             walls.append([i, j, 0, Constants.D_BOTTOM_RIGHT])
-        if (self.structure_map.map[i + 1][j] == Constants.M_EMPTY or self.structure_map.map[i + 1][j] == Constants.M_OBJECT): # BOTTOM
+        if (self.structure_map.map[i + 1][j] == Constants.M_EMPTY or self.structure_map.map[i + 1][j] == Constants.M_DOOR): # BOTTOM
             walls.append([i, j, 0, Constants.D_BOTTOM])
-        if ((self.structure_map.map[i + 1][j] == Constants.M_EMPTY or self.structure_map.map[i + 1][j] == Constants.M_OBJECT) and (self.structure_map.map[i][j - 1] == Constants.M_EMPTY or self.structure_map.map[i][j - 1] == Constants.M_OBJECT)): # BOTTOM LEFT
+        if ((self.structure_map.map[i + 1][j] == Constants.M_EMPTY or self.structure_map.map[i + 1][j] == Constants.M_DOOR) and (self.structure_map.map[i][j - 1] == Constants.M_EMPTY or self.structure_map.map[i][j - 1] == Constants.M_DOOR)): # BOTTOM LEFT
             walls.append([i, j, 0, Constants.D_BOTTOM_LEFT])
-        if (self.structure_map.map[i][j - 1] == Constants.M_EMPTY or self.structure_map.map[i][j - 1] == Constants.M_OBJECT): # LEFT
+        if (self.structure_map.map[i][j - 1] == Constants.M_EMPTY or self.structure_map.map[i][j - 1] == Constants.M_DOOR): # LEFT
             walls.append([i, j, 0, Constants.D_LEFT])
-        if ((self.structure_map.map[i - 1][j] == Constants.M_EMPTY or self.structure_map.map[i - 1][j] == Constants.M_OBJECT) and (self.structure_map.map[i][j - 1] == Constants.M_EMPTY or self.structure_map.map[i][j - 1] == Constants.M_OBJECT)): # TOP LEFT
+        if ((self.structure_map.map[i - 1][j] == Constants.M_EMPTY or self.structure_map.map[i - 1][j] == Constants.M_DOOR) and (self.structure_map.map[i][j - 1] == Constants.M_EMPTY or self.structure_map.map[i][j - 1] == Constants.M_DOOR)): # TOP LEFT
             walls.append([i, j, 0, Constants.D_TOP_LEFT])
 
     def calc_wall_field(self, walls):
@@ -231,7 +231,7 @@ class WallMap(object):
 
         for i in range(self.len_row):
             for j in range(self.len_col):
-                if (self.structure_map.map[i][j] == Constants.M_WALL or self.structure_map.map[i][j] == Constants.M_DOOR):
+                if (self.structure_map.map[i][j] == Constants.M_WALL):
                     draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), Constants.C_BLACK, Constants.C_BLACK)
                 elif (self.structure_map.map[i][j] == Constants.M_OBJECT):
                     draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), Constants.C_GRAY, Constants.C_GRAY)

@@ -7,7 +7,7 @@ import pstats
 
 from crowd_map import CrowdMap
 from individual import Individual
-from pheromone_map import PheromoneMap
+from dinamic_map import DinamicMap
 from simulator import Simulator
 from static_map import StaticMap
 from structure_map import StructureMap
@@ -48,12 +48,12 @@ if __name__ == "__main__":
     if (args.draw):
         crowd_map.draw_map("../output/" + args.experiment, 0)
 
-    pheromone_map = PheromoneMap(args.experiment, structure_map)
-    pheromone_map.load_map()
+    dinamic_map = DinamicMap(args.experiment, structure_map)
+    dinamic_map.load_map()
 
     # SIMULATOR
     directory = ''
-    simulator = Simulator(structure_map, wall_map, static_map, crowd_map, pheromone_map, individuals, directory)
+    simulator = Simulator(structure_map, wall_map, static_map, crowd_map, dinamic_map, individuals, directory)
     #simulator.simulate()
 
 

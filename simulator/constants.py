@@ -29,3 +29,7 @@ class Constants(object):
     C_GRAY = (75, 75, 75)
     C_LIGHT_BLACK = (35, 35, 35)
     C_RED = (255, 0, 0)
+
+    # Difusion and Decay Constant
+    DIFUSIONDECAY_ALFA = 0.6
+    DIFUSIONDECAY_SIGMA = 0.1

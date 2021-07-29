@@ -1,12 +1,15 @@
 
-class PheromoneMap(object):
-    """Responsable to control the individual's pheromone in the map.
+from copy import deepcopy
+from constants import Constants
+
+class DinamicMap(object):
+    """Responsable to control the individual's tracing in the map.
 
 
     Attributes
     ----------
     label : str
-        The name of the pheromone map.
+        The name of the dinamic map.
 
     structure_map : StructureMap
         The structure map contains information about the physical map.
@@ -50,7 +53,13 @@ class PheromoneMap(object):
 
 
     def difusion_decay(self):
-
+        aux_map = deepcopy(self.map)
+        for i in range(1, len(self.map)):
+            for j in range(1, len(self.map)):
+                aux_map[i][j] = ((1 - Constants.DIFUSIONDECAY_ALFA) * (1 - Constants.DIFUSIONDECAY_SIGMA) *
+                    self.map[i][j] + Constants.DIFUSIONDECAY_ALFA  * (1 - Constants.DIFUSIONDECAY_SIGMA) / 8 *
+                    (aux_map[i + 1][j] + aux_map[i][j + 1] + aux_map[i - 1][j] + aux_map[i][j - 1] +
+                    aux_map[i + 1][j + 1] + aux_map[i + 1][j - 1] + aux_map[i - 1][j + 1] + aux_map[i - 1][j - 1]))
         return
 
     # def difusaoDecaimento(self, oldMapa, newMapa):
