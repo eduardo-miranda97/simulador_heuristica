@@ -115,11 +115,14 @@ class CrowdMap(object):
         new_col : int
             Column of the map that the individual will be.
         """  
-        self.map[new_row][new_col] = self.map[original_row][original_row]
-        self.map[original_row][original_row] = 0
+        self.map[new_row][new_col] = self.map[original_row][original_col]
+        self.map[original_row][original_col] = 0
 
     def free_exit_gates(self):
-        return
+        """Set all the positions in the map that are exits as 0
+        """
+        for exit in self.structure_map.exits:
+            self.map[exit[0]][exit[1]] = 0
 
     
     # ''' Funcao que vai fazer o movimento do individuo, chamara a propria funcao do individuo

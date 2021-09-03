@@ -44,6 +44,7 @@ class StructureMap(object):
         self.map = []
         self.len_row = 0
         self.len_col = 0
+        self.exits = self.get_exits()
 
     def load_map(self):
         """Read the map file to construct the structure map.
@@ -72,3 +73,29 @@ class StructureMap(object):
                 if (self.map[i][j] == Constants.M_EMPTY):
                     empty_positions.append((i, j))
         return empty_positions
+
+    def isSaida(self, row, col):
+        """Returns if the position is an exit or not.
+
+        Returns
+        -------
+        logical
+            Return if the structure map in the position i,j is an exit
+        """
+        return self.map[row][col] == Constants.M_DOOR 
+
+    def get_exits(self):
+        """Returns a list which contains the exits of the structure map.
+
+        Returns
+        -------
+        list of tuple
+            List that contains the exits of the structure map.
+        """
+        exits = []
+        for i in range(self.len_row):
+            for j in range(self.len_col):
+                if (self.map[i][j] == Constants.M_DOOR):
+                    exits.append((i, j))
+        return exits
+        

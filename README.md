@@ -18,3 +18,6 @@ pip install -r requirements.txt
 
 # Considerações
 
+Sobre experimentação: 
+    Travar o crowd_map ou deixar aleatório;
+    Se travar crowd_map, será feita mais experimentações de diferentes cenários com diferentes crowd_map
