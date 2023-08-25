@@ -1,5 +1,7 @@
 
 from copy import deepcopy
+from math import exp 
+
 from constants import Constants
 
 class DinamicMap(object):
@@ -61,6 +63,11 @@ class DinamicMap(object):
                     (aux_map[i + 1][j] + aux_map[i][j + 1] + aux_map[i - 1][j] + aux_map[i][j - 1] +
                     aux_map[i + 1][j + 1] + aux_map[i + 1][j - 1] + aux_map[i - 1][j + 1] + aux_map[i - 1][j - 1]))
         return
+
+
+    def calc_dinamic_value(self, row, col, individual_KW):
+        return 1
+        # return exp(individual_KW * self.map[row][col])
 
     # def difusaoDecaimento(self, oldMapa, newMapa):
     #     for i in range(1, newMapa.__len__()-1):

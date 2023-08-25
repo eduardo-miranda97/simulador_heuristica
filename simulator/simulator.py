@@ -30,7 +30,9 @@ class Simulator(object):
 
     def simulate(self):
         while (not self.check_evacuated_individuals() and self.iteration < self.MAX_ITERATIONS):
-            self.crowd_map.draw_map("../output/" + self.directory, self.individuals, self.iteration)
+            print(self.iteration)
+            #self.crowd_map.draw_map("../output/" + self.directory, self.individuals, self.iteration)
+            self.crowd_map.draw_map("../output/" + self.directory, self.iteration)
             self.dinamic_map.draw_map(self.directory, self.iteration)
             self.iteration += 1
 
@@ -42,7 +44,7 @@ class Simulator(object):
                 if (not individual.evacuated):
                     if (individual.steps == individual.speed):
 
-                        self.individual.move(self.structure_map, self.wall_map, self.static_map, self.crowd_map, self.dinamic_map)
+                        individual.move(self.structure_map, self.wall_map, self.static_map, self.crowd_map, self.dinamic_map)
 
                         if(self.structure_map.isSaida(individual.row, individual.col)):
                             individual.evacuated = True
@@ -53,7 +55,7 @@ class Simulator(object):
             self.crowd_map.free_exit_gates()
 
             # After the iteration it's recalculed the pheromone map
-            self.dinamic_map.difusion_decay()
+            # self.dinamic_map.difusion_decay()
 
         return self.iteration
     
@@ -70,5 +72,5 @@ class Simulator(object):
 
     def individual_exit_distance(self, individual):
         # retorna distancia da porta
-        return self.static_map[individual.row][individual.col]
+        return self.static_map.map[individual.row][individual.col]
 

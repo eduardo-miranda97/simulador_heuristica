@@ -208,7 +208,9 @@ class WallMap(object):
         float
             Returns the value based in the individual_KW and the new location.
         """
-        return exp(individual_KW * numpy.min([Util.DMax, self.map[row][col]]))
+        # DMax era uma constante de distancia máxima para a parede
+        #return exp(individual_KW * numpy.min([Util.DMax, self.map[row][col]]))
+        return exp(individual_KW * self.map[row][col])
 
     def draw_map(self, directory):
         """Draw the wall map using a range of colors from red to blue.

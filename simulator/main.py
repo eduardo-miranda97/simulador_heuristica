@@ -4,6 +4,7 @@ import argparse
 import cProfile as profile
 import json
 import pstats
+import random
 
 from crowd_map import CrowdMap
 from individual import Individual
@@ -16,12 +17,16 @@ from wall_map import WallMap
 parser = argparse.ArgumentParser(description='Simulator')
 parser.add_argument('-e', action="store", dest='experiment', type=str, required=True, help="Experiment Folder.")
 parser.add_argument('-d', action="store_const", dest='draw', const=True, default=False, help="Enable Draw Mode.")
+parser.add_argument('-s', action="store", dest='seed', type=int, required=False, help="Seed to generate the scenario.")
 
 if __name__ == "__main__":
     args = parser.parse_args()
 
     # p = profile.Profile()
     # p.enable()
+
+    if args.seed:
+        random.seed(args.seed)
 
     structure_map = StructureMap(args.experiment, "../input/" + args.experiment + "/map.txt")
     structure_map.load_map()
@@ -54,7 +59,7 @@ if __name__ == "__main__":
     # SIMULATOR
     directory = ''
     simulator = Simulator(structure_map, wall_map, static_map, crowd_map, dinamic_map, individuals, directory)
-    #simulator.simulate()
+    simulator.simulate()
 
 
     # p.disable()

@@ -1,5 +1,10 @@
 # -*- coding:utf-8 -*-
 
+from constants import Constants
+
+from random import randint
+from math import exp
+
 class Individual(object):
 
     def __init__(self, configuration, col, row):
@@ -10,6 +15,7 @@ class Individual(object):
         self.KS = configuration["KS"] # Static map const
         self.KW = configuration["KW"] # Wall map const
         self.KI = configuration["KI"] # Inertia const
+        self.old_direction = -1
 
         self.row = row
         self.col = col
@@ -17,140 +23,73 @@ class Individual(object):
         self.steps = 0
 
 
-    def move(self, structure_map, wall_map, static_map, crowd_map, pheromone_map):
-        return
+    def move(self, structure_map, wall_map, static_map, crowd_map, dinamic_map):
+        directions = [   Constants.D_TOP,
+            Constants.D_TOP_RIGHT,
+            Constants.D_RIGHT,
+            Constants.D_BOTTOM_RIGHT,
+            Constants.D_BOTTOM,
+            Constants.D_BOTTOM_LEFT,
+            Constants.D_LEFT,
+            Constants.D_TOP_LEFT
+        ]
+
+        initial_directions = []
+        for direction in directions:
+            initial_directions.append((self.row + direction[0], self.col + direction[1]))
+
+        for direction in initial_directions:
+            if structure_map.isSaida(direction[0], direction[1]):
+                crowd_map.update_individual_position(self.row, self.col, direction[0], direction[1])
+                self.row = direction[0]
+                self.col = direction[1]
+                return {"row":direction[0], "col":direction[1], "direct":-2}
+
+        possible_directions = []
+        for i in range(len(initial_directions)):
+            if static_map.field_exist(initial_directions[i]) and crowd_map.check_empty_position(initial_directions[i][0], initial_directions[i][1]):
+                if structure_map.map[initial_directions[i][0]][initial_directions[i][1]] in [Constants.M_EMPTY, Constants.M_DOOR]:
+                    possible_directions.append({"direct":i, "row":initial_directions[i][0], "col":initial_directions[i][1]})
+
+        if not possible_directions:
+            self.old_direction = -1
+            return
+
+        total = 0
+        for direction in possible_directions:
+            D = dinamic_map.calc_dinamic_value(direction["row"], direction["col"], self.KD)
+            S = static_map.calc_static_value(direction["row"], direction["col"], self.KS)
+            I = self.calc_inertial_value(direction["direct"])
+            W = wall_map.calc_wall_value(direction["row"], direction["col"], self.KW)
+            direction["move_chance"] = D * S * I * W
+            total += direction["move_chance"]
+
+        possible_directions[0]["move_chance"] /= total
+        for i in range(1, len(possible_directions)):
+            possible_directions[i]["move_chance"] = possible_directions[i-1]["move_chance"] + possible_directions[i]["move_chance"] / total
+
+        init = 0
+        sorted_number = randint(0, 100) / 100
+        new_direction = possible_directions[0]
+        for i in range(len(possible_directions)):
+            if sorted_number < possible_directions[i]["move_chance"] and sorted_number > init:
+                new_direction = possible_directions[i]
+                break
+            init = possible_directions[i]["move_chance"]
+
+        crowd_map.update_individual_position(self.row, self.col, new_direction["row"], new_direction["col"])
+        self.row = new_direction["row"]
+        self.col = new_direction["col"]
+        self.old_direction = new_direction["direct"]
+
+        return {"row":new_direction["row"], "col":new_direction["col"], "direct":new_direction["direct"]}
 
 
-    # def calculaProbabilidadesMovimentoBruto(self, linha, coluna, individual, campoMov):
-    #     if(self.listaMapas[individual.idMapa].qtdSaidasVizinhas(linha, coluna) == 0):  
-    #         #superior esquerdo - individual 0
-    #         campoMov[Util.C_SE] = self.listaMapas[individual.idMapa].calculaValorMovimentoBruto(linha-1, coluna-1, Util.C_SE, individual)
-    #         #superior direito - individual 1
-    #         campoMov[Util.C_SD] = self.listaMapas[individual.idMapa].calculaValorMovimentoBruto(linha-1, coluna+1, Util.C_SD, individual)
-    #         #inferior direito - individual 2
-    #         campoMov[Util.C_ID] = self.listaMapas[individual.idMapa].calculaValorMovimentoBruto(linha+1, coluna+1, Util.C_ID, individual)
-    #         #inferior esquerdo - individual 3
-    #         campoMov[Util.C_IE] = self.listaMapas[individual.idMapa].calculaValorMovimentoBruto(linha+1, coluna-1, Util.C_IE, individual)
-    #         #topo - individual 4
-    #         campoMov[Util.C_TO] = self.listaMapas[individual.idMapa].calculaValorMovimentoBruto(linha-1, coluna,   Util.C_TO, individual)
-    #         #baixo - individual 5
-    #         campoMov[Util.C_BA] = self.listaMapas[individual.idMapa].calculaValorMovimentoBruto(linha+1, coluna,   Util.C_BA, individual)
-    #         #esquerdo - individual 6
-    #         campoMov[Util.C_ES] = self.listaMapas[individual.idMapa].calculaValorMovimentoBruto(linha, coluna-1,   Util.C_ES, individual)
-    #         #direito - individual 7
-    #         campoMov[Util.C_DI] = self.listaMapas[individual.idMapa].calculaValorMovimentoBruto(linha, coluna+1,   Util.C_DI, individual)
-    #         #meio - individual 8
-    #         campoMov[Util.C_ME] = self.listaMapas[individual.idMapa].calculaValorMovimentoBruto(linha, coluna,     Util.C_ME, individual)
-    #     else:
-    #         if(self.listaMapas[individual.idMapa].isSaidaVazia(linha-1, coluna-1)):
-    #             campoMov[Util.C_SE] = 1
-    #         else:
-    #             campoMov[Util.C_SE] = 0
-    #         if(self.listaMapas[individual.idMapa].isSaidaVazia(linha-1, coluna+1)):
-    #             campoMov[Util.C_SD] = 1
-    #         else:
-    #             campoMov[Util.C_SD] = 0
-    #         if(self.listaMapas[individual.idMapa].isSaidaVazia(linha+1, coluna+1)):
-    #             campoMov[Util.C_ID] = 1
-    #         else:
-    #             campoMov[Util.C_ID] = 0
-    #         if(self.listaMapas[individual.idMapa].isSaidaVazia(linha+1, coluna-1)):
-    #             campoMov[Util.C_IE] = 1
-    #         else:
-    #             campoMov[Util.C_IE] = 0
-    #         if(self.listaMapas[individual.idMapa].isSaidaVazia(linha-1, coluna)):
-    #             campoMov[Util.C_TO] = 1
-    #         else:
-    #             campoMov[Util.C_TO] = 0
-    #         if(self.listaMapas[individual.idMapa].isSaidaVazia(linha+1, coluna)):
-    #             campoMov[Util.C_BA] = 1
-    #         else:
-    #             campoMov[Util.C_BA] = 0
-    #         if(self.listaMapas[individual.idMapa].isSaidaVazia(linha, coluna-1)):
-    #             campoMov[Util.C_ES] = 1
-    #         else:
-    #             campoMov[Util.C_ES] = 0
-    #         if(self.listaMapas[individual.idMapa].isSaidaVazia(linha, coluna+1)):
-    #             campoMov[Util.C_DI] = 1
-    #         else:
-    #             campoMov[Util.C_DI] = 0
-    #         campoMov[Util.C_ME] = 0
-            
-    #     return campoMov
-    
-    # def calculaTotalNormalizacao(self, campoMov):
-    #     total = campoMov[Util.C_SE] + campoMov[Util.C_SD] + campoMov[Util.C_ID] + campoMov[Util.C_IE] + campoMov[Util.C_TO]
-    #     return total + campoMov[Util.C_BA] + campoMov[Util.C_ES] + campoMov[Util.C_DI] + campoMov[Util.C_ME]
-    
-    # def calculaProbabilidadesMovimentoNormalizado(self, campoMov, total):
-    #     if(total==0):
-    #         campoMov[Util.C_SE] = 0
-    #         campoMov[Util.C_SD] = 0
-    #         campoMov[Util.C_ID] = 0
-    #         campoMov[Util.C_IE] = 0
-    #         campoMov[Util.C_TO] = 0
-    #         campoMov[Util.C_BA] = 0
-    #         campoMov[Util.C_ES] = 0
-    #         campoMov[Util.C_DI] = 0
-    #         campoMov[Util.C_ME] = 0
-    #     else:
-    #         campoMov[Util.C_SE] = campoMov[Util.C_SE]/total
-    #         campoMov[Util.C_SD] = campoMov[Util.C_SE] + campoMov[Util.C_SD]/total
-    #         campoMov[Util.C_ID] = campoMov[Util.C_SD] + campoMov[Util.C_ID]/total
-    #         campoMov[Util.C_IE] = campoMov[Util.C_ID] + campoMov[Util.C_IE]/total
-    #         campoMov[Util.C_TO] = campoMov[Util.C_IE] + campoMov[Util.C_TO]/total
-    #         campoMov[Util.C_BA] = campoMov[Util.C_TO] + campoMov[Util.C_BA]/total
-    #         campoMov[Util.C_ES] = campoMov[Util.C_BA] + campoMov[Util.C_ES]/total
-    #         campoMov[Util.C_DI] = campoMov[Util.C_ES] + campoMov[Util.C_DI]/total
-    #         campoMov[Util.C_ME] = campoMov[Util.C_DI] + campoMov[Util.C_ME]/total
-    #     return campoMov
+    def calc_inertial_value(self, new_direction):
+        if new_direction == self.old_direction:
+            return exp(self.KI)
+        return 1
 
-    # def sorteiaCaminhoDestino(self, campoMov):
-    #     ini = 0
-    #     sort = randint(0, 100)/100
-    #     for i in range(campoMov.__len__()):
-    #         if(sort < campoMov[i] and sort > ini):
-    #             return i
-    #         ini = campoMov[i]
-
-    # def converteDirecao(self, individual, caminho):
-    #     #Retorna ["direcao","[caminho]"]
-    #     linha    = individual.linha
-    #     coluna   = individual.coluna
-    #     direcao  = 0
-    #     if(caminho == Util.C_SE):
-    #         linha   = linha-1
-    #         coluna  = coluna-1
-    #         direcao = Util.C_SE
-    #     if(caminho == Util.C_SD):
-    #         linha   = linha-1
-    #         coluna  = coluna+1
-    #         direcao = Util.C_SD
-    #     if(caminho == Util.C_ID):
-    #         linha   = linha+1
-    #         coluna  = coluna+1
-    #         direcao = Util.C_ID
-    #     if(caminho == Util.C_IE):
-    #         linha   = linha+1
-    #         coluna  = coluna-1
-    #         direcao = Util.C_IE
-    #     if(caminho == Util.C_TO):
-    #         linha   = linha-1
-    #         coluna  = coluna
-    #         direcao = Util.C_TO
-    #     if(caminho == Util.C_BA):
-    #         linha   = linha+1
-    #         coluna  = coluna
-    #         direcao = Util.C_BA
-    #     if(caminho == Util.C_ES):
-    #         linha   = linha
-    #         coluna  = coluna-1
-    #         direcao = Util.C_ES
-    #     if(caminho == Util.C_DI):
-    #         linha   = linha
-    #         coluna  = coluna+1   
-    #         direcao = Util.C_DI 
-    #     return [direcao, [self.listaMapas[individual.idMapa].mapa_estatico[linha][coluna], linha, coluna]]
 
     def __str__(self):
         string = f"Label: {self.label}\t R:{self.red}\t G:{self.green}\t B:{self.blue}\t Speed:{self.speed}\t"
