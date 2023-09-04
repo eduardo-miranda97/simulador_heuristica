@@ -57,7 +57,7 @@ if __name__ == "__main__":
     dinamic_map.load_map()
 
     # SIMULATOR
-    directory = ''
+    directory = "../output/" + args.experiment
     simulator = Simulator(structure_map, wall_map, static_map, crowd_map, dinamic_map, individuals, directory)
     simulator.simulate()
 
