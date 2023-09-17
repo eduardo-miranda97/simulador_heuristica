@@ -7,6 +7,8 @@ from pathlib import Path
 from PIL import Image
 from PIL import ImageDraw
 from random import randint
+from os import mkdir
+from os.path import isdir 
 import re
 
 from constants import Constants
@@ -124,40 +126,6 @@ class CrowdMap(object):
         for exit in self.structure_map.exits:
             self.map[exit[0]][exit[1]] = 0
 
-    
-    # ''' Funcao que vai fazer o movimento do individuo, chamara a propria funcao do individuo
-    # para que ele descubra para onde ira se mover
-    # '''
-    # def move_individual(self, individual):
-    #     linha    = individual.linha
-    #     coluna   = individual.coluna
-    #     campoMov = [0,0,0,0,0,0,0,0,0]
-    #     campoMov = self.calculaProbabilidadesMovimentoBruto(linha, coluna, individual, campoMov)
-    #     #Normalizacao
-    #     total = self.calculaTotalNormalizacao(campoMov)
-    #     campoMov = self.calculaProbabilidadesMovimentoNormalizado(campoMov, total)
-    #     caminho = self.sorteiaCaminhoDestino(campoMov)
-    #     resp = self.converteDirecao(individual, caminho)
-    #     direcao = resp[0]
-    #     caminho = resp[1]
-    #     #atualiza no mapa o individuo
-    #     if(caminho[1] != linha or caminho[2] != coluna):
-    #         if(self.listaMapas[individual.idMapa].verificaMovimentoValido(caminho[1], caminho[2])):
-    #             self.MovsPerIter = self.MovsPerIter + 1
-    #             #atualiza os dados no mapa de individuos
-    #             self.listaMapas[individual.idMapa].mapa_individuo[caminho[1]][caminho[2]] = Util.M_INDIVIDUO
-    #             self.listaMapas[individual.idMapa].mapa_individuo[linha][coluna]  = Util.M_VAZIO
-    #             self.listaMapas[individual.idMapa].mapa_dinamico1[linha][coluna] += 1
-    #             #atualiza nos dados do individuo sua posicao
-    #             individual.linha  = caminho[1]
-    #             individual.coluna = caminho[2]
-    #             individual.ultimaDirecao = direcao
-    #             individual.movimentosFeitos += 1
-    #     else:
-    #         individual.movimentosWaiting += 1
-
-
-
     def draw_map(self, directory, iteration):
         """Draw the crowd map using the structe map and the individuals colors.
 
@@ -169,6 +137,11 @@ class CrowdMap(object):
         iteration : int
             Number of the iteration.
         """
+        if not isdir(directory + "/crowd_map"):
+            mkdir(directory + "/crowd_map")
+
+        directory += "/crowd_map"
+
         field_size = 20
         image = Image.new("RGB", (field_size * self.len_col, field_size * self.len_row), Constants.C_WHITE)
         draw = ImageDraw.Draw(image)
@@ -189,5 +162,6 @@ class CrowdMap(object):
                     if (self.structure_map.map[i][j] != Constants.M_DOOR):
                         draw.ellipse((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), self.map[i][j].color, Constants.C_BLACK) 
         
-        image_name = directory + "/" + self.label + "_crowd_map_" + str(iteration) + ".png"
+        image_name = directory + "/" + "crowd_map_" + str(iteration) + ".png"
+        # image_name = directory + "/" + self.label + "_crowd_map_" + str(iteration) + ".png"
         image.save(image_name)

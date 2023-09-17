@@ -82,7 +82,11 @@ class Individual(object):
         self.col = new_direction["col"]
         self.old_direction = new_direction["direct"]
 
-        return {"row":new_direction["row"], "col":new_direction["col"], "direct":new_direction["direct"]}
+        if new_direction["row"] != self.row or new_direction["col"] != self.col:
+            return {"row":new_direction["row"], "col":new_direction["col"], "direct":new_direction["direct"]}
+
+        self.old_direction = -1
+        return 
 
 
     def calc_inertial_value(self, new_direction):
