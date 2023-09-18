@@ -13,7 +13,7 @@ import time
 
 class Simulator(object):
 
-    MAX_ITERATIONS = 1200
+    MAX_ITERATIONS = 250
 
     def __init__(self, structure_map, wall_map, static_map, crowd_map, dinamic_map, individuals, directory):
 
@@ -30,7 +30,7 @@ class Simulator(object):
 
     def simulate(self):
         while (not self.check_evacuated_individuals() and self.iteration < self.MAX_ITERATIONS):
-            # print(self.iteration)
+            print(self.iteration)
             #self.crowd_map.draw_map("../output/" + self.directory, self.individuals, self.iteration)
             self.crowd_map.draw_map(self.directory, self.iteration)
             self.dinamic_map.draw_map(self.directory, self.iteration)
@@ -47,7 +47,7 @@ class Simulator(object):
                         direction = individual.move(self.structure_map, self.wall_map, self.static_map, self.crowd_map, self.dinamic_map)
                         # Increase the dinamic map if someone move to the direction
                         if direction:
-                            self.dinamic_map.map[direction['row']][direction['col']] += 1 
+                            self.dinamic_map.map[direction['row']][direction['col']] += 1
 
                         if(self.structure_map.isSaida(individual.row, individual.col)):
                             individual.evacuated = True

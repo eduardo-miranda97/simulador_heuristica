@@ -86,26 +86,20 @@ class DinamicMap(object):
                     draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), Constants.C_RED, Constants.C_BLACK)
                 else:
                     draw.rectangle((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), (255, 255 - 20 * int(self.map[i][j]), 255), Constants.C_BLACK)
-                    if self.map[i][j] != 0:
-                        print(self.map[i][j])
         
         #image_name = directory + "/" + self.label + "_dinamic_map_" + str(iteration) + ".png"
         image_name = directory + "/" + "dinamic_map_" + str(iteration) + ".png"
         image.save(image_name)
 
     def difusion_decay3(self):
-        # aux_map = deepcopy(self.map)
+        aux_map = deepcopy(self.map)
         for i in range(1, len(self.map) - 1):
             for j in range(1, len(self.map) - 1):
-                # aux_map[i][j] = self.map[i][j] + Constants.DIFUSIONDECAY_ALFA / 4 * (self.map[i+1][j] + self.map[i-1][j] + self.map[i][j+1] + self.map[i][j-1] + 
-                                                                            #    self.map[i-1][j-1] + self.map[i-1][j+1] + self.map[i+1][j-1] + self.map[i+1][j+1])
-                self.map[i][j] = self.map[i][j] - (Constants.DIFUSIONDECAY_SIGMA * self.map[i][j])
-                # if aux_map[i][j] != 0:
-                #     print(f"{aux_map[i][j]},")
+                aux_map[i][j] = self.map[i][j] + Constants.DIFUSIONDECAY_ALFA * (self.map[i+1][j] + self.map[i-1][j] + self.map[i][j+1] + self.map[i][j-1] + 
+                                                                                self.map[i-1][j-1] + self.map[i-1][j+1] + self.map[i+1][j-1] + self.map[i+1][j+1])
+                aux_map[i][j] = aux_map[i][j] * Constants.DIFUSIONDECAY_SIGMA # - (Constants.DIFUSIONDECAY_SIGMA * aux_map[i][j])
 
-            # print('\n')
-
-        # self.map = aux_map
+        self.map = aux_map
 
     def difusion_decay2(self):
         aux_map = deepcopy(self.map)

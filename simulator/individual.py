@@ -77,12 +77,13 @@ class Individual(object):
                 break
             init = possible_directions[i]["move_chance"]
 
-        crowd_map.update_individual_position(self.row, self.col, new_direction["row"], new_direction["col"])
-        self.row = new_direction["row"]
-        self.col = new_direction["col"]
-        self.old_direction = new_direction["direct"]
 
-        if new_direction["row"] != self.row or new_direction["col"] != self.col:
+
+        if not (new_direction["row"] == self.row and new_direction["col"] == self.col):
+            crowd_map.update_individual_position(self.row, self.col, new_direction["row"], new_direction["col"])
+            self.row = new_direction["row"]
+            self.col = new_direction["col"]
+            self.old_direction = new_direction["direct"]
             return {"row":new_direction["row"], "col":new_direction["col"], "direct":new_direction["direct"]}
 
         self.old_direction = -1
