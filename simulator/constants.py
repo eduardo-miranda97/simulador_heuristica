@@ -31,5 +31,5 @@ class Constants(object):
     C_RED = (255, 0, 0)
 
     # Difusion and Decay Constant
-    DIFUSIONDECAY_ALFA = 0.6
-    DIFUSIONDECAY_SIGMA = 0.1
+    DIFUSIONDECAY_ALFA = 0.001
+    DIFUSIONDECAY_SIGMA = 0.25
