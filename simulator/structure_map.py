@@ -98,4 +98,36 @@ class StructureMap(object):
                 if (self.map[i][j] == Constants.M_DOOR):
                     exits.append((i, j))
         return exits
+
+
+    def extract_doors_info(self):
+        doors_info = []
+        visited = set()
         
+        for row in range(len(self.map)):
+            for col in range(len(self.map[row])):
+                if self.map[row][col] == 2 and (row, col) not in visited:
+                    door_info = {'row': row, 'col': col, 'size': 0, 'direction': ''}
+                    
+                    if col < len(self.map[row]) - 1 and self.map[row][col + 1] == 2:
+                        door_info['direction'] = 'H'
+                        
+                        c = col
+                        while c < len(self.map[row]) and self.map[row][c] == 2:
+                            door_info['size'] += 1
+                            visited.add((row, c))
+                            c += 1
+                    elif row < len(self.map) - 1 and self.map[row + 1][col] == 2:
+                        door_info['direction'] = 'V'
+                        
+                        l = row
+                        while l < len(self.map) and self.map[l][col] == 2:
+                            door_info['size'] += 1
+                            visited.add((l, col))
+                            l += 1
+
+                    doors_info.append(door_info)
+    
+        return doors_info
+
+
