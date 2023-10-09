@@ -91,41 +91,17 @@ class DinamicMap(object):
         image_name = directory + "/" + "dinamic_map_" + str(iteration) + ".png"
         image.save(image_name)
 
-    def difusion_decay3(self):
-        aux_map = deepcopy(self.map)
-        for i in range(1, len(self.map) - 1):
-            for j in range(1, len(self.map) - 1):
-                aux_map[i][j] = self.map[i][j] + Constants.DIFUSIONDECAY_ALFA * (self.map[i+1][j] + self.map[i-1][j] + self.map[i][j+1] + self.map[i][j-1] + 
-                                                                                self.map[i-1][j-1] + self.map[i-1][j+1] + self.map[i+1][j-1] + self.map[i+1][j+1])
-                aux_map[i][j] = aux_map[i][j] * Constants.DIFUSIONDECAY_SIGMA # - (Constants.DIFUSIONDECAY_SIGMA * aux_map[i][j])
-
-        self.map = aux_map
-
-    def difusion_decay2(self):
-        aux_map = deepcopy(self.map)
-        for i in range(1, len(self.map) - 1):
-            for j in range(1, len(self.map) - 1):
-                aux_map[i][j] = ((1 - Constants.DIFUSIONDECAY_ALFA) * (1 - Constants.DIFUSIONDECAY_SIGMA) *
-                    self.map[i][j] + Constants.DIFUSIONDECAY_ALFA  * (1 - Constants.DIFUSIONDECAY_SIGMA) / 8 *
-                    (aux_map[i + 1][j] + aux_map[i][j + 1] + aux_map[i - 1][j] + aux_map[i][j - 1] +
-                    aux_map[i + 1][j + 1] + aux_map[i + 1][j - 1] + aux_map[i - 1][j + 1] + aux_map[i - 1][j - 1]))
-        self.map = aux_map
 
     def difusion_decay(self):
+        aux_map = deepcopy(self.map)
         for i in range(1, len(self.map) - 1):
-            for j in range(1, len(self.map) - 1):
-                self.map[i][j] = (self.map[i][j] 
-                            + Constants.DIFUSIONDECAY_ALFA / 8 *
-                              (self.map[i+1][j] + self.map[i-1][j] + self.map[i][j+1] + self.map[i][j-1] + 
-                               self.map[i-1][j-1] + self.map[i-1][j+1] + self.map[i+1][j-1] + self.map[i+1][j+1])
-                            - self.map[i][j] * Constants.DIFUSIONDECAY_SIGMA)
+            for j in range(1, len(self.map[i]) - 1):
+                self.map[i][j] = aux_map[i][j] + Constants.DIFUSIONDECAY_ALFA * (aux_map[i+1][j] + aux_map[i-1][j] + aux_map[i][j+1] + aux_map[i][j-1] + 
+                                                                                aux_map[i-1][j-1] + aux_map[i-1][j+1] + aux_map[i+1][j-1] + aux_map[i+1][j+1])
+        for i in range(1, len(self.map) - 1):
+            for j in range(1, len(self.map[i]) - 1):
+                self.map[i][j] = self.map[i][j]  * Constants.DIFUSIONDECAY_SIGMA
+
 
     def calc_dinamic_value(self, row, col, individual_KW):
         return exp(individual_KW * self.map[row][col])
-
-    # def difusaoDecaimento(self, oldMapa, newMapa):
-    #     for i in range(1, newMapa.__len__()-1):
-    #         for j in range(1, newMapa[0].__len__()-1):
-    #             newMapa[i][j] = oldMapa[i][j] + ((Util.DD_ALFA/4)*(oldMapa[i+1][j] + oldMapa[i-1][j] + oldMapa[i][j+1] + oldMapa[i][j-1] + 
-    #                                                                oldMapa[i-1][j-1] + oldMapa[i-1][j+1] + oldMapa[i+1][j-1] + oldMapa[i+1][j+1]))
-    #             newMapa[i][j] = oldMapa[i][j] - (Util.DD_SIGMA*oldMapa[i][j])

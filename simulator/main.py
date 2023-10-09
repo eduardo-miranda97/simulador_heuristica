@@ -5,6 +5,7 @@ import cProfile as profile
 import json
 import pstats
 import random
+import os
 
 from crowd_map import CrowdMap
 from individual import Individual
@@ -28,21 +29,24 @@ if __name__ == "__main__":
     if args.seed:
         random.seed(args.seed)
 
-    structure_map = StructureMap(args.experiment, "../input/" + args.experiment + "/map.txt")
+    sep = os.path.sep
+    root_path = os.path.dirname(os.path.abspath("simulator")) + sep
+
+    structure_map = StructureMap(args.experiment, root_path + "input" + sep + args.experiment + sep + "map.txt")
     structure_map.load_map()
 
     wall_map = WallMap(args.experiment, structure_map)
     wall_map.load_map()
     if (args.draw):
-        wall_map.draw_map("../output/" + args.experiment)
+        wall_map.draw_map(root_path + "input" + sep + args.experiment)
 
     static_map = StaticMap(args.experiment, structure_map)
     static_map.load_map()
     if (args.draw):
-        static_map.draw_map("../output/" + args.experiment)
+        static_map.draw_map(root_path + "input" + sep + args.experiment)
         
     individuals = []
-    with open("../input/" + args.experiment + "/individuals.json", 'r') as json_file:
+    with open(root_path + "input" + sep + args.experiment + sep + "individuals.json", 'r') as json_file:
         data = json.load(json_file)
         for caracterization in data['caracterizations']:
             for _ in range(caracterization['amount']):
@@ -51,13 +55,12 @@ if __name__ == "__main__":
     crowd_map = CrowdMap(args.experiment, structure_map)
     crowd_map.load_map(individuals)
     if (args.draw):
-        crowd_map.draw_map("../output/" + args.experiment, 0)
-
+        crowd_map.draw_map(root_path + "output" + sep + args.experiment, 0)
     dinamic_map = DinamicMap(args.experiment, structure_map)
     dinamic_map.load_map()
 
     # SIMULATOR
-    directory = "../output/" + args.experiment
+    directory = root_path + "output" + sep + args.experiment
     simulator = Simulator(structure_map, wall_map, static_map, crowd_map, dinamic_map, individuals, directory)
     simulator.simulate()
 

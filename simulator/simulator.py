@@ -13,7 +13,7 @@ import time
 
 class Simulator(object):
 
-    MAX_ITERATIONS = 250
+    MAX_ITERATIONS = 200
 
     def __init__(self, structure_map, wall_map, static_map, crowd_map, dinamic_map, individuals, directory):
 
@@ -58,7 +58,7 @@ class Simulator(object):
             self.crowd_map.free_exit_gates()
 
             # After the iteration it's recalculed the pheromone map
-            self.dinamic_map.difusion_decay3()
+            self.dinamic_map.difusion_decay()
 
         self.geraHTML(self.directory, self.iteration, len(self.individuals), 1)
 
