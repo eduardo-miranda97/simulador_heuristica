@@ -27,6 +27,15 @@ class Simulator(object):
         self.iteration = 0
         # self.log = Log() ********************
     
+    def __init__(self, scenario):
+        self.structure_map = scenario.structure_map
+        self.wall_map = scenario.wall_map
+        self.static_map = scenario.static_map
+        self.crowd_map = scenario.crowd_map
+        self.dinamic_map = scenario.dinamic_map
+        self.individuals = scenario.individuals
+        self.directory = scenario.directory
+        self.iteration = 0
 
     def simulate(self):
         while (not self.check_evacuated_individuals() and self.iteration < self.MAX_ITERATIONS):

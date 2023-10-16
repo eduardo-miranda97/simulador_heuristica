@@ -18,7 +18,8 @@ from wall_map import WallMap
 parser = argparse.ArgumentParser(description='Simulator')
 parser.add_argument('-e', action="store", dest='experiment', type=str, required=True, help="Experiment Folder.")
 parser.add_argument('-d', action="store_const", dest='draw', const=True, default=False, help="Enable Draw Mode.")
-parser.add_argument('-s', action="store", dest='seed', type=int, required=False, help="Seed to generate the scenario.")
+parser.add_argument('-m', action="store", dest='scenario_seed', type=int, required=False, help="Seed to generate the scenario.")
+parser.add_argument('-s', action="store", dest='simulation_seed', type=int, required=False, help="Seed to guide the simulation.")
 
 if __name__ == "__main__":
     args = parser.parse_args()
@@ -26,11 +27,11 @@ if __name__ == "__main__":
     # p = profile.Profile()
     # p.enable()
 
-    if args.seed:
-        random.seed(args.seed)
+    if args.scenario_seed:
+        random.seed(args.scenario_seed)
 
     sep = os.path.sep
-    root_path = os.path.dirname(os.path.abspath("simulator")) + sep
+    root_path = os.path.dirname(os.path.dirname(os.path.abspath("simulator"))) + sep
 
     structure_map = StructureMap(args.experiment, root_path + "input" + sep + args.experiment + sep + "map.txt")
     structure_map.load_map()
@@ -44,13 +45,16 @@ if __name__ == "__main__":
     static_map.load_map()
     if (args.draw):
         static_map.draw_map(root_path + "input" + sep + args.experiment)
-        
+  
     individuals = []
     with open(root_path + "input" + sep + args.experiment + sep + "individuals.json", 'r') as json_file:
         data = json.load(json_file)
         for caracterization in data['caracterizations']:
             for _ in range(caracterization['amount']):
                 individuals.append(Individual(caracterization, 0, 0))
+
+    if args.simulation_seed:
+        random.seed(args.simulation_seed)      
 
     crowd_map = CrowdMap(args.experiment, structure_map)
     crowd_map.load_map(individuals)
