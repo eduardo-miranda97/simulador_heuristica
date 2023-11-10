@@ -105,3 +105,9 @@ class DinamicMap(object):
 
     def calc_dinamic_value(self, row, col, individual_KW):
         return exp(individual_KW * self.map[row][col])
+
+
+    def reset_map(self):
+        for i in range(self.len_row):
+            for j in range(self.len_col):
+                self.map[i][j] = 0

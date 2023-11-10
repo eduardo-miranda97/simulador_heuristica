@@ -100,5 +100,16 @@ class StructureMap(object):
         return exits
 
     def rewrite_doors(self, new_doors):
-        #TO DO
-        pass
+        for exit in self.exits:
+            self.map[exit[0]][exit[1]] = Constants.M_WALL
+        
+        door_info = {'row': row, 'col': col, 'size': 0, 'direction': ''}
+        for new_door in new_doors:
+            if new_door['direction'] == 'V':
+                for i in range(0, door_info['size']):
+                    self.map[new_door['row'] + i][new_door['col']]
+            else:
+                for i in range(0, door_info['size']): 
+                    self.map[new_door['row']][new_door['col'] + i]            
+
+        self.exits = self.get_exits()

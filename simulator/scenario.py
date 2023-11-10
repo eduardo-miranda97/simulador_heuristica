@@ -108,8 +108,12 @@ class Scenario(object):
 
 
     def soft_reset_individuals(self):
-        #TO DO
-        pass
+        for individual in self.individuals:
+            individual.row
+            individual.col = 0
+            individual.old_direction = -1
+            individual.evacuated = False
+            individual.steps = 0
 
 
     def simulation_reset(self, simulation_seed=0):
