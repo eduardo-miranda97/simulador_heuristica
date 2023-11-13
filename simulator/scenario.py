@@ -14,7 +14,7 @@ import json
 class Scenario(object):
 
 
-    def __init__(self, experiment, draw=False, scenario_seed=0, simulation_seed=0):
+    def __init__(self, experiment, draw=False, scenario_seed=0, simulation_seed=0, directory=''):
         self.directory = experiment
         self.draw = draw
         self.scenario_seed = scenario_seed
@@ -24,15 +24,24 @@ class Scenario(object):
 
         self.sep = os.path.sep
         self.root_path = os.path.dirname(os.path.dirname(os.path.abspath("simulator"))) + self.sep
+        
+        self.root_path2 = self.root_path + "output" + self.sep
 
         self.structure_map = self.load_structure_map()
-        self.doors_configurations = self.extract_doors_configurations()
+        self.doors_configurations = self.extract_doors_info()
 
         self.wall_map = None
         self.static_map = None
         self.crowd_map = None
         self.dinamic_map = None
         self.individuals = None
+
+        self.load_structure_map()
+        self.load_wall_map()
+        self.load_static_map()
+        self.load_dinamic_map()
+        self.load_individuals()
+        self.load_crowd_map()
 
 
     def load_structure_map(self):

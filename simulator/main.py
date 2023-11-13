@@ -14,6 +14,7 @@ from simulator import Simulator
 from static_map import StaticMap
 from structure_map import StructureMap
 from wall_map import WallMap
+from scenario import Scenario
 
 parser = argparse.ArgumentParser(description='Simulator')
 parser.add_argument('-e', action="store", dest='experiment', type=str, required=True, help="Experiment Folder.")
@@ -65,9 +66,11 @@ if __name__ == "__main__":
 
     # SIMULATOR
     directory = root_path + "output" + sep + args.experiment
-    simulator = Simulator(structure_map, wall_map, static_map, crowd_map, dinamic_map, individuals, directory)
-    simulator.simulate()
+    scen = Scenario("cult_experiment",True,5,12)
+    simulator = Simulator(scen)
+    iterations, qtdDistance = simulator.simulate()
 
-
+    print("qtd iteracoes " + str(iterations))
+    print("qtd distancia " + str(qtdDistance))
     # p.disable()
     # pstats.Stats(p).sort_stats('cumulative').print_stats(30)

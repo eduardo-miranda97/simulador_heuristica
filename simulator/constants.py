@@ -33,3 +33,6 @@ class Constants(object):
     # Difusion and Decay Constant
     DIFUSIONDECAY_ALFA = 0.05
     DIFUSIONDECAY_SIGMA = 0.7
+
+    # Constant to multiply the index of distance from the individuals to the closest door
+    DISTANCE_MULTIPLIER = 0.25
