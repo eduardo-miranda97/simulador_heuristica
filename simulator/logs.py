@@ -1,5 +1,5 @@
 
-from constants import Constants
+from .constants import Constants
 
 class Logs(object):
     
@@ -208,6 +208,6 @@ class Logs(object):
         sum = 0.0
         for i in range(len(self.individualsDistances)):
             sum += self.individualsDistances[i] * i * Constants.DISTANCE_MULTIPLIER
-        
+
         return sum
 

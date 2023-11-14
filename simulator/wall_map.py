@@ -9,7 +9,7 @@ from PIL import Image
 from PIL import ImageDraw
 import re
 
-from constants import Constants
+from .constants import Constants
 
 class WallMap(object):
     """Responsable to calc the distance from each field in the map to the closest wall or door.

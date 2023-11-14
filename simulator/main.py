@@ -7,14 +7,14 @@ import pstats
 import random
 import os
 
-from crowd_map import CrowdMap
-from individual import Individual
-from dinamic_map import DinamicMap
-from simulator import Simulator
-from static_map import StaticMap
-from structure_map import StructureMap
-from wall_map import WallMap
-from scenario import Scenario
+from .crowd_map import CrowdMap
+from .individual import Individual
+from .dinamic_map import DinamicMap
+from .simulator import Simulator
+from .static_map import StaticMap
+from .structure_map import StructureMap
+from .wall_map import WallMap
+from .scenario import Scenario
 
 parser = argparse.ArgumentParser(description='Simulator')
 parser.add_argument('-e', action="store", dest='experiment', type=str, required=True, help="Experiment Folder.")

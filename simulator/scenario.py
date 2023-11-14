@@ -1,11 +1,11 @@
 
-from crowd_map import CrowdMap
-from individual import Individual
-from dinamic_map import DinamicMap
-from simulator import Simulator
-from static_map import StaticMap
-from structure_map import StructureMap
-from wall_map import WallMap
+from .crowd_map import CrowdMap
+from .individual import Individual
+from .dinamic_map import DinamicMap
+from .simulator import Simulator
+from .static_map import StaticMap
+from .structure_map import StructureMap
+from .wall_map import WallMap
 
 import random
 import os

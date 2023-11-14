@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 
-from logs import Logs
+from .logs import Logs
 
 class Simulator(object):
 

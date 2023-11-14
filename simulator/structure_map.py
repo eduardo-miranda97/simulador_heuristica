@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 
-from constants import Constants
+from .constants import Constants
 
 class StructureMap(object):
     """Responsable to store the map fisical informations: doors, walls, etc.

@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 
-from constants import Constants
+from .constants import Constants
 
 from random import randint
 from math import exp

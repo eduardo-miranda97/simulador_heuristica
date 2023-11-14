@@ -6,7 +6,7 @@ from PIL import ImageDraw
 from os import mkdir
 from os.path import isdir 
 
-from constants import Constants
+from .constants import Constants
 
 
 class DinamicMap(object):

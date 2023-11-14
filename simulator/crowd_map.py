@@ -1,17 +1,12 @@
 # -*- coding:utf-8 -*-
 
-from colour import Color
-from copy import deepcopy
-from math import exp
-from pathlib import Path
 from PIL import Image
 from PIL import ImageDraw
 from random import randint
 from os import mkdir
 from os.path import isdir 
-import re
 
-from constants import Constants
+from .constants import Constants
 
 class CrowdMap(object):
     """Responsable to control the individual's location in the map.

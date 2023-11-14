@@ -8,7 +8,7 @@ from PIL import Image
 from PIL import ImageDraw
 import re
 
-from constants import Constants
+from .constants import Constants
 
 class StaticMap(object):
     """Responsable to calc the distance from the exit doors for each field in the map.
