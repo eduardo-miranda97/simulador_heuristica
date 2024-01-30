@@ -14,7 +14,7 @@ import json
 class Scenario(object):
 
 
-    def __init__(self, experiment, draw=False, scenario_seed=0, simulation_seed=0, directory=''):
+    def __init__(self, experiment, draw=False, scenario_seed=0, simulation_seed=0):
         self.directory = experiment
         self.draw = draw
         self.scenario_seed = scenario_seed

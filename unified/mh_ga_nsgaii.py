@@ -89,10 +89,6 @@ class ChromosomeFactory:
     ----------
     instance: object
         Instance of the problem to be solved.
-    objective_functions: list of functions
-        Functions that will be used to evaluate a solution.
-    obj_count: int
-        Number of objective functions.
 
     Methods
     -------
@@ -108,10 +104,9 @@ class ChromosomeFactory:
         Create a chromosome based on a gene.
     """
 
-    def __init__(self, instance, *args):
+    def __init__(self, instance):
         self.instance = instance
-        self.objective_functions = list(args)
-        self.obj_count = len(self.objective_functions)
+
 
     def decode(self, gene):
         """Decode a gene into a solution.
