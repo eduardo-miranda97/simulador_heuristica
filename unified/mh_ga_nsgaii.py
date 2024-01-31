@@ -324,8 +324,8 @@ def nsgaii(factory, selector, population_size, mutation_probability,
     # generate the first population and offspring
     population = set()
     while len(population) < population_size:
-        chromosome = factory.new()
-        chromosome = factory.build(0, chromosome)
+        gene = factory.new()
+        chromosome = factory.build(0, gene)
         population.add(chromosome)
 
     for generation in range(max_generations):

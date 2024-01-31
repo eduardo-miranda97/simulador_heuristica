@@ -1,6 +1,7 @@
 
-from heuristic.nsgaii.nsgaii import ChromosomeFactory
-
+from mh_ga_nsgaii import ChromosomeFactory, Chromosome
+from sim_ca_scenario import Scenario
+from sim_ca_simulator import Simulator
 
 class Gene:
 
@@ -15,3 +16,9 @@ class Factory(ChromosomeFactory):
         simulator = Simulator(scen)
         iterations, qtdDistance = simulator.simulate()
         return iterations, qtdDistance
+
+
+    def build(self, generation, gene):
+        solution = self.decode(gene)
+        return Chromosome(generation, gene, list(solution))
+    
