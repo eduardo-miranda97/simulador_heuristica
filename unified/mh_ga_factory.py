@@ -20,7 +20,13 @@ class Factory(ChromosomeFactory):
 
 
     def decode(self, gene):
-        scen = Scenario("cult_experiment", True, 5, 12)
+        doors = []
+        for i in range(len(gene)):
+            if gene[i]:
+                doors.append(self.exits[i])
+
+        scen = Scenario(self.instance.experiment, doors, self.instance.draw,
+                        self.instance.scenario_seed, self.instance.simulation_seed)
         simulator = Simulator(scen)
         iterations, qtdDistance = simulator.simulate()
         return iterations, qtdDistance
