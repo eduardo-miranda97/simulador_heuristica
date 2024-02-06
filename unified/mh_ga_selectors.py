@@ -1,3 +1,6 @@
+
+from random import sample
+
 def roullete(population):
     pass
 
@@ -7,7 +10,7 @@ def rank(population):
 
 
 def tournament(population):
-    pool = random.sample(population, 4)
+    pool = sample(population, 4)
     pool.sort(key=lambda x: x.rank)
     return pool[0], pool[1]
 

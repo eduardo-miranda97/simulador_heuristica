@@ -29,7 +29,7 @@ class Factory(ChromosomeFactory):
                         self.instance.scenario_seed, self.instance.simulation_seed)
         simulator = Simulator(scen)
         iterations, qtdDistance = simulator.simulate()
-        return iterations, qtdDistance
+        return len(doors), iterations, qtdDistance
 
 
     def build(self, generation, gene):
