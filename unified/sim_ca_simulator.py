@@ -33,9 +33,9 @@ class Simulator(object):
 
     def simulate(self):
         while (not self.check_evacuated_individuals() and self.iteration < self.MAX_ITERATIONS):
-            print(self.iteration)
             #self.crowd_map.draw_map("../output/" + self.directory, self.individuals, self.iteration)
             if self.draw:
+                print(self.iteration)
                 self.crowd_map.draw_map(self.draw_path, self.iteration)
                 self.dinamic_map.draw_map(self.draw_path, self.iteration)
             self.iteration += 1

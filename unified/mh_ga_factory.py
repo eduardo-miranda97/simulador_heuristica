@@ -29,6 +29,7 @@ class Factory(ChromosomeFactory):
                         self.instance.scenario_seed, self.instance.simulation_seed)
         simulator = Simulator(scen)
         iterations, qtdDistance = simulator.simulate()
+        print(f"Portas: {len(doors)}, Iter: {iterations}, Dist: {qtdDistance}")
         return len(doors), iterations, qtdDistance
 
 
@@ -70,6 +71,15 @@ class Factory(ChromosomeFactory):
         gene.configuration[i] = aux
 
         return gene
+
+
+    def uncode(self, gene):
+        doors = []
+        for i in range(len(gene.configuration)):
+            if gene.configuration[i]:
+                doors.append(self.exits[i])
+        return doors
+
 
 def selector(population):
     """Tournament selection."""
