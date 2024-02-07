@@ -323,14 +323,19 @@ def nsgaii(factory, selector, population_size, mutation_probability,
     """
     # generate the first population and offspring
     population = set()
+    print("populating")
     while len(population) < population_size:
         gene = factory.new()
         chromosome = factory.build(0, gene)
         population.add(chromosome)
+        print("built ")
+
 
     for generation in range(max_generations):
+        print("Generation" + str(generation))
         # GENERATE OFFSPRING
         offspring = set()
+        print("Cross and mutate")
         while len(offspring) < population_size:
             parent_a, parent_b = selector(population)
             child = factory.crossover(parent_a.gene, parent_b.gene)
@@ -338,10 +343,15 @@ def nsgaii(factory, selector, population_size, mutation_probability,
                 factory.mutate(child)
             child = factory.build(generation, child)
             offspring.add(child)
+        print("Finished cross and mutate")
 
         population.update(offspring)
+
+        print("Sort")
         pareto = fast_non_dominated_sort(population)
         population = set()
+
+        print("Calc Pareto")
         for front in pareto:
             crowding_distance_assignment(front)
             if len(population) + len(front) > population_size:

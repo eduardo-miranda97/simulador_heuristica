@@ -1,5 +1,6 @@
 
 import json
+import os
 
 class Instance:
 
@@ -10,9 +11,12 @@ class Instance:
         self.simulation_seed = simulation_seed
 
 
-def read_instance(config_file):
+def read_instance(experiment):
     data = None
-    with open(config_file, 'r') as f:
+    sep = os.path.sep
+    root_path = os.path.dirname(os.path.dirname(os.path.abspath("simulator"))) + sep        
+    input_file = root_path + "input" + sep + experiment + sep + "experiment.json"
+    with open(input_file, 'r') as f:
         data = json.load(f)
 
     return Instance(data["experiment"], data["draw"], data["scenario_seed"], data["simulation_seed"])

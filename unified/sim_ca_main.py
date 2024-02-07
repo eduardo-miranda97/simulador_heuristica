@@ -68,7 +68,7 @@ if __name__ == "__main__":
 
     # SIMULATOR
     directory = root_path + "output" + sep + args.experiment
-    scen = Scenario("cult_experiment",True,5,12)
+    scen = Scenario("cult_experiment",None,True,5,12)
     simulator = Simulator(scen)
     iterations, qtdDistance = simulator.simulate()
 

@@ -2,7 +2,6 @@
 from sim_ca_crowd_map import CrowdMap
 from sim_ca_individual import Individual
 from sim_ca_dinamic_map import DinamicMap
-from sim_ca_simulator import Simulator
 from sim_ca_static_map import StaticMap
 from sim_ca_structure_map import StructureMap
 from sim_ca_wall_map import WallMap
@@ -14,28 +13,25 @@ import json
 class Scenario(object):
 
 
-    def __init__(self, experiment):
+    def __init__(self, experiment, doors=None, draw=False, scenario_seed=0, simulation_seed=0):
+        self.directory = experiment
+
         self.sep = os.path.sep
         self.root_path = os.path.dirname(os.path.dirname(os.path.abspath("simulator"))) + self.sep        
         self.draw_path = self.root_path + "output" + self.sep + self.directory + self.sep
-
+        
         self.structure_map = self.load_structure_map()
         self.doors_configurations = self.extract_doors_info()
 
-    def __init__(self, experiment, doors, draw=False, scenario_seed=0, simulation_seed=0):
-        self.directory = experiment
+        if doors is None and draw==False and scenario_seed==0 and simulation_seed==0:
+            return
+
         self.draw = draw
         self.scenario_seed = scenario_seed
-        self.num_scenario = 0
         self.simulation_seed = simulation_seed
+
         self.num_simulation = 0
-
-        self.sep = os.path.sep
-        self.root_path = os.path.dirname(os.path.dirname(os.path.abspath("simulator"))) + self.sep        
-        self.draw_path = self.root_path + "output" + self.sep + self.directory + self.sep
-
-        self.structure_map = self.load_structure_map()
-        self.doors_configurations = self.extract_doors_info()
+        self.num_scenario = 0
 
         self.wall_map = None
         self.static_map = None
@@ -43,36 +39,14 @@ class Scenario(object):
         self.dinamic_map = None
         self.individuals = None
 
-        self.map_reset(doors)
-
-
-    def __init__(self, experiment, draw, scenario_seed, simulation_seed):
-        self.directory = experiment
-        self.draw = draw
-        self.scenario_seed = scenario_seed
-        self.num_scenario = 0
-        self.simulation_seed = simulation_seed
-        self.num_simulation = 0
-
-        self.sep = os.path.sep
-        self.root_path = os.path.dirname(os.path.dirname(os.path.abspath("simulator"))) + self.sep        
-        self.draw_path = self.root_path + "output" + self.sep + self.directory + self.sep
-
-        self.structure_map = self.load_structure_map()
-        self.doors_configurations = self.extract_doors_info()
-
-        self.wall_map = None
-        self.static_map = None
-        self.crowd_map = None
-        self.dinamic_map = None
-        self.individuals = None
-
-        # self.load_structure_map()
-        self.load_wall_map()
-        self.load_static_map()
-        self.load_dinamic_map()
-        self.load_individuals()
-        self.load_crowd_map()
+        if doors is not None:
+            self.map_reset(doors)
+        else:
+            self.load_wall_map()
+            self.load_static_map()
+            self.load_dinamic_map()
+            self.load_individuals()
+            self.load_crowd_map()
 
 
     def load_structure_map(self):
@@ -180,6 +154,9 @@ class Scenario(object):
         self.load_wall_map()
         self.load_static_map()
         self.load_dinamic_map()
-        self.soft_reset_individuals()
+        if self.individuals:
+            self.soft_reset_individuals()
+        else:
+            self.load_individuals()
         self.load_crowd_map()
 

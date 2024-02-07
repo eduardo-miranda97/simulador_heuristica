@@ -29,6 +29,15 @@
             "console": "integratedTerminal",
             "justMyCode": true,
             "args": ["-e", "cult_experiment", "-d", "-s", "12"]
+        },
+        {
+            "name": "Python: Debug3",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["-e", "cult_experiment"]
         }
     ]
 }

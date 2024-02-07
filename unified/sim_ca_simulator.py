@@ -27,6 +27,7 @@ class Simulator(object):
         self.individuals = scenario.individuals
         self.directory = scenario.root_path
         self.draw_path = scenario.draw_path
+        self.draw = scenario.draw
         self.iteration = 0
         self.log = Logs()
 
@@ -34,8 +35,9 @@ class Simulator(object):
         while (not self.check_evacuated_individuals() and self.iteration < self.MAX_ITERATIONS):
             print(self.iteration)
             #self.crowd_map.draw_map("../output/" + self.directory, self.individuals, self.iteration)
-            self.crowd_map.draw_map(self.draw_path, self.iteration)
-            self.dinamic_map.draw_map(self.draw_path, self.iteration)
+            if self.draw:
+                self.crowd_map.draw_map(self.draw_path, self.iteration)
+                self.dinamic_map.draw_map(self.draw_path, self.iteration)
             self.iteration += 1
 
             self.sort_individuals_by_distance()
@@ -65,7 +67,8 @@ class Simulator(object):
             # Save people
             self.log.saveIterationDistances(self.individuals, self.static_map)
 
-        self.log.generateHTML(self.draw_path, self.iteration, len(self.individuals), 1)
+        if self.draw:
+            self.log.generateHTML(self.draw_path, self.iteration, len(self.individuals), 1)
 
         return self.iteration, self.log.calculateDistances()
 
