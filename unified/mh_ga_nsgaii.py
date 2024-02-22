@@ -337,11 +337,15 @@ def nsgaii(factory, selector, population_size, mutation_probability,
         print("Cross and mutate")
         while len(offspring) < population_size:
             parent_a, parent_b = selector(population)
-            child = factory.crossover(parent_a.gene, parent_b.gene)
+            child1, child2 = factory.crossover(parent_a.gene, parent_b.gene)
             if np.random.uniform() < mutation_probability:
-                factory.mutate(child)
-            child = factory.build(generation, child)
-            offspring.add(child)
+                factory.mutate(child1)
+            child1 = factory.build(generation, child1)
+            offspring.add(child1)
+            if np.random.uniform() < mutation_probability:
+                factory.mutate(child2)
+            child2 = factory.build(generation, child2)
+            offspring.add(child2)
         print("Finished cross and mutate")
 
         population.update(offspring)

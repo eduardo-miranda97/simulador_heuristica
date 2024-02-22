@@ -44,31 +44,29 @@ class Factory(ChromosomeFactory):
 
 
     def crossover(self, parent_a, parent_b):
-        child = [0] * len(parent_a.configuration)
-        for i in range(len(parent_a.configuration)):
-            child[i] = parent_a.configuration[i] and parent_b.configuration[i]
+        gene_size = len(parent_a.configuration)
+        qtd_mut = max(int(gene_size * 0.3), 1)
         
-        count_a = parent_a.configuration.count(True)
-        count_b = parent_b.configuration.count(True)
-        count_c = child.count(True)
+        child1 = [0] * gene_size
+        child2 = [0] * gene_size
+        for i in range(gene_size):
+            child1[i] = parent_a.configuration
+            child2[i] = parent_b.configuration
 
-        if (count_c == count_a and count_a > count_b) or (count_c == count_b and count_a <= count_b):
-            j = randint(0, len(parent_a.configuration) - 1)
-            while not child[j]:
-                j = randint(0, len(parent_a.configuration) - 1)
-            child[j] = False
+        for i in range(qtd_mut):
+            i = randint(0, gene_size)
+            child1[i] = not child1[i]
+            i = randint(0, gene_size)
+            child2[i] = not child2[i]
 
-        return Gene(child)
+        return Gene(child1), Gene(child2)
 
 
     def mutate(self, gene):
-        start_mutation = randint(0, len(gene.configuration) - 2)
-        aux = gene.configuration[start_mutation]
-        i = start_mutation
-        while i != len(gene.configuration) - 2:
-            gene.configuration[i] = gene.configuration[i + 1]
-            i += 1
-        gene.configuration[i] = aux
+        qtd_mut = max(int(len(gene.configuration) * 0.1), 1)
+        for _ in range(qtd_mut):
+            i = randint(0, len(gene.configuration))
+            gene.configuration[i] = not gene.configuration[i]
 
         return gene
 
