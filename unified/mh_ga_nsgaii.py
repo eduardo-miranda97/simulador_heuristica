@@ -328,7 +328,6 @@ def nsgaii(factory, selector, population_size, mutation_probability,
         gene = factory.new()
         chromosome = factory.build(0, gene)
         population.add(chromosome)
-        print("built ")
 
 
     for generation in range(max_generations):

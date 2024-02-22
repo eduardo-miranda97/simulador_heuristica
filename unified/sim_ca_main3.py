@@ -64,4 +64,3 @@ if __name__ == "__main__":
     
     uncoded = [factory.uncode(x.gene) for x in results]
     save_result(results, uncoded, 'res.json')
-    print(results)
