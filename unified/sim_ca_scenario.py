@@ -46,6 +46,7 @@ class Scenario(object):
             self.load_static_map()
             self.load_dinamic_map()
             self.load_individuals()
+            random.seed(self.scenario_seed)
             self.load_crowd_map()
 
 
@@ -136,6 +137,7 @@ class Scenario(object):
         self.dinamic_map.reset_map()
         self.soft_reset_individuals()
         random.seed(self.simulation_seed)
+        # As pessoas vao ficar todas nas saidas
 
 
     def scenario_reset(self, scenario_seed=0, simulation_seed=0):

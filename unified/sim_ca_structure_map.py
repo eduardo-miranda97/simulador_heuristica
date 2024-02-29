@@ -44,7 +44,7 @@ class StructureMap(object):
         self.map = []
         self.len_row = 0
         self.len_col = 0
-        self.exits = self.get_exits()
+        self.exits = []
 
     def load_map(self):
         """Read the map file to construct the structure map.
@@ -58,6 +58,9 @@ class StructureMap(object):
             self.len_row += 1
         file.close()
         self.len_col = len(self.map[0])
+
+        self.exits = self.get_exits()
+
 
     def get_empty_positions(self):
         """Returns a list which contains the empty positions of the structure map.
@@ -106,9 +109,9 @@ class StructureMap(object):
         for new_door in new_doors:
             if new_door['direction'] == 'V':
                 for i in range(0, new_door['size']):
-                    self.map[new_door['row'] + i][new_door['col']]
+                    self.map[new_door['row'] + i][new_door['col']] = Constants.M_DOOR
             else:
                 for i in range(0, new_door['size']): 
-                    self.map[new_door['row']][new_door['col'] + i]            
+                    self.map[new_door['row']][new_door['col'] + i] = Constants.M_DOOR         
 
         self.exits = self.get_exits()

@@ -1,6 +1,10 @@
 {
     "experiment": "cult_experiment",
-    "draw": false,
-    "scenario_seed": 5,
+    "draw": true,
+    "scenario_seed": [
+        1,
+        2,
+        3
+    ],
     "simulation_seed": 14
 }

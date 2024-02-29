@@ -3,7 +3,7 @@ from mh_ga_nsgaii import ChromosomeFactory, Chromosome
 from sim_ca_scenario import Scenario
 from sim_ca_simulator import Simulator
 
-from random import choice, randint, sample
+from random import choice, randint, sample, seed
 
 class Gene:
 
@@ -17,6 +17,7 @@ class Factory(ChromosomeFactory):
         super().__init__(instance)
         scen = Scenario(instance.experiment)
         self.exits = scen.doors_configurations
+        seed(10)
 
 
     def decode(self, gene):
@@ -25,12 +26,42 @@ class Factory(ChromosomeFactory):
             if gene.configuration[i]:
                 doors.append(self.exits[i])
 
+        #print(doors)
+        #input()
+
+        iters = []
+        distances = []
+        print("Inicio Simulacao 0")
         scen = Scenario(self.instance.experiment, doors, self.instance.draw,
-                        self.instance.scenario_seed, self.instance.simulation_seed)
+                            self.instance.scenario_seed[0], self.instance.simulation_seed)
         simulator = Simulator(scen)
         iterations, qtdDistance = simulator.simulate()
         print(f"Portas: {len(doors)}, Iter: {iterations}, Dist: {qtdDistance}")
-        return len(doors), iterations, qtdDistance
+        iters.append(iterations)
+        distances.append(qtdDistance)
+        print("Fim Simulacao 0")
+        input()
+
+        i=0
+        for current_seed in self.instance.scenario_seed[1:]:
+            i += 1
+            print(f"Inicio Simulacao {i}")
+            scen.scenario_reset(current_seed, self.instance.simulation_seed)
+            simulator = Simulator(scen)
+            iterations, qtdDistance = simulator.simulate()
+            print(f"Portas: {len(doors)}, Iter: {iterations}, Dist: {qtdDistance}")
+            iters.append(iterations)
+            distances.append(qtdDistance)
+            print(f"Fim Simulacao {i}")
+            input()
+
+        soma = sum(iters)
+        distance = sum(distances)
+        soma = soma / len(iters)
+        distance = distance / len(distances)
+
+        print(f"Final decode - Portas: {len(doors)}, Iters: {soma}, Distance: {distance}")
+        return len(doors), soma, distance
 
 
     def build(self, generation, gene):
@@ -54,9 +85,9 @@ class Factory(ChromosomeFactory):
             child2[i] = parent_b.configuration
 
         for i in range(qtd_mut):
-            i = randint(0, gene_size)
+            i = randint(0, gene_size - 1)
             child1[i] = not child1[i]
-            i = randint(0, gene_size)
+            i = randint(0, gene_size - 1)
             child2[i] = not child2[i]
 
         return Gene(child1), Gene(child2)
@@ -65,7 +96,7 @@ class Factory(ChromosomeFactory):
     def mutate(self, gene):
         qtd_mut = max(int(len(gene.configuration) * 0.1), 1)
         for _ in range(qtd_mut):
-            i = randint(0, len(gene.configuration))
+            i = randint(0, len(gene.configuration)  - 1)
             gene.configuration[i] = not gene.configuration[i]
 
         return gene
