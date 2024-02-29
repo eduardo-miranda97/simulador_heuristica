@@ -86,6 +86,7 @@ class Scenario(object):
     
     def load_crowd_map(self):
         self.crowd_map = CrowdMap(self.directory, self.structure_map)
+        random.seed(self.scenario_seed)
         self.crowd_map.load_map(self.individuals)
         if (self.draw):
             self.crowd_map.draw_map(self.root_path + "output" + self.sep + self.directory, 0)
@@ -146,7 +147,6 @@ class Scenario(object):
         self.num_scenario += 1
         self.dinamic_map.reset_map()
         self.soft_reset_individuals()
-        random.seed(self.scenario_seed)
         self.load_crowd_map()
         random.seed(self.simulation_seed)
 

@@ -26,12 +26,8 @@ class Factory(ChromosomeFactory):
             if gene.configuration[i]:
                 doors.append(self.exits[i])
 
-        #print(doors)
-        #input()
-
         iters = []
         distances = []
-        print("Inicio Simulacao 0")
         scen = Scenario(self.instance.experiment, doors, self.instance.draw,
                             self.instance.scenario_seed[0], self.instance.simulation_seed)
         simulator = Simulator(scen)
@@ -39,21 +35,16 @@ class Factory(ChromosomeFactory):
         print(f"Portas: {len(doors)}, Iter: {iterations}, Dist: {qtdDistance}")
         iters.append(iterations)
         distances.append(qtdDistance)
-        print("Fim Simulacao 0")
-        input()
 
         i=0
         for current_seed in self.instance.scenario_seed[1:]:
             i += 1
-            print(f"Inicio Simulacao {i}")
             scen.scenario_reset(current_seed, self.instance.simulation_seed)
             simulator = Simulator(scen)
             iterations, qtdDistance = simulator.simulate()
             print(f"Portas: {len(doors)}, Iter: {iterations}, Dist: {qtdDistance}")
             iters.append(iterations)
             distances.append(qtdDistance)
-            print(f"Fim Simulacao {i}")
-            input()
 
         soma = sum(iters)
         distance = sum(distances)
@@ -81,8 +72,8 @@ class Factory(ChromosomeFactory):
         child1 = [0] * gene_size
         child2 = [0] * gene_size
         for i in range(gene_size):
-            child1[i] = parent_a.configuration
-            child2[i] = parent_b.configuration
+            child1[i] = parent_a.configuration[i]
+            child2[i] = parent_b.configuration[i]
 
         for i in range(qtd_mut):
             i = randint(0, gene_size - 1)

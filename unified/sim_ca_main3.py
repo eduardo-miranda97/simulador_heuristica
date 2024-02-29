@@ -2,6 +2,8 @@
 
 import argparse
 import json
+import random
+import numpy as np
 
 from mh_ga_instance import read_instance
 from mh_ga_factory import Factory, selector
@@ -31,6 +33,10 @@ parser.add_argument(
     help='Nome da pasta onde os arquivos de estatística serão salvos'
 )
 
+parser.add_argument(
+    '--seed', type=int, help='Semente para o gerador de numeros aleatórios', default=52
+)
+
 #def save_result(result, instance, filename):
 def save_result(result, uncoded, filename):
 
@@ -54,6 +60,8 @@ def save_result(result, uncoded, filename):
 if __name__ == "__main__":
     args = parser.parse_args()
 
+    random.seed(args.seed)
+    np.random.seed(args.seed)
     instance = read_instance(args.experiment)
 
     factory = Factory(instance)
