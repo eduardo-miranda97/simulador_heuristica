@@ -17,6 +17,7 @@ class Factory(ChromosomeFactory):
         super().__init__(instance)
         scen = Scenario(instance.experiment)
         self.exits = scen.doors_configurations
+        self.cache = {}
         seed(10)
 
 
@@ -56,8 +57,14 @@ class Factory(ChromosomeFactory):
 
 
     def build(self, generation, gene):
-        solution = self.decode(gene)
-        return Chromosome(generation, gene, list(solution))
+        conf = tuple(gene.configuration)
+        if conf in self.cache:
+            solution = self.cache[conf]
+        else:
+            solution = list(self.decode(gene))
+            self.cache[conf] = solution
+
+        return Chromosome(generation, gene, solution)
 
 
     def new(self):
