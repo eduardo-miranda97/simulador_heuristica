@@ -15,7 +15,7 @@ parser.add_argument('-e', action="store", dest='experiment', type=str, required=
 
 parser.add_argument(
     '--pop_size', type=int, help='Quantidade de indivíduos em cada geração',
-    default=4
+    default=10
 )
 
 parser.add_argument(
@@ -25,7 +25,7 @@ parser.add_argument(
 
 parser.add_argument(
     '--max_gen', type=int, help='Numero de gerações para o NSGA-II',
-    default=2
+    default=300
 )
 
 parser.add_argument(
@@ -34,7 +34,7 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    '--seed', type=int, help='Semente para o gerador de numeros aleatórios', default=52
+    '--seed', type=int, help='Semente para o gerador de numeros aleatórios', default=75
 )
 
 #def save_result(result, instance, filename):
