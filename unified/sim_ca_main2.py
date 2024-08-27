@@ -24,7 +24,7 @@ if __name__ == "__main__":
     if args.scenario_seed:
         random.seed(args.scenario_seed)
 
-    scen = Scenario(args.experiment, None, args.draw, 5, 12)
+    scen = Scenario(args.experiment, None, args.draw, 1, 55)
     # scen = Scenario("cult_experiment", None, True,5,12)
     simulator = Simulator(scen)
     iterations, qtdDistance = simulator.simulate()

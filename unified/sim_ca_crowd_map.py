@@ -162,6 +162,6 @@ class CrowdMap(object):
                         draw.ellipse((j * field_size, i * field_size, (j + 1) * field_size, (i + 1) * field_size), self.map[i][j].color, Constants.C_BLACK) 
         
         # image_name = directory + str(iteration) + ".png"
-        image_name = directory + sep + "crowd_map" + str(iteration) + ".png"
+        image_name = directory + sep + "crowd_map_" + str(iteration) + ".png"
         # image_name = directory + "/" + self.label + "_crowd_map_" + str(iteration) + ".png"
         image.save(image_name)
