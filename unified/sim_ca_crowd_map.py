@@ -2,7 +2,7 @@
 
 from PIL import Image
 from PIL import ImageDraw
-from random import randint
+from random import randint,shuffle
 from os import mkdir
 from os.path import isdir, sep
 
@@ -53,7 +53,7 @@ class CrowdMap(object):
         self.len_row = structure_map.len_row
         self.len_col = structure_map.len_col
 
-    def load_map(self, individuals):
+    def load_map(self, individuals, positions=None):
         """Based on the structure map and individuals, the crowd map is constructed.
 
         Parameters
@@ -64,9 +64,13 @@ class CrowdMap(object):
         self.map = []
 
         self.map = [[0] * self.len_col for _ in range(self.len_row)]
-        self.place_individuals(individuals)
+        if positions is None:
+            self.place_individuals_random(individuals)
+        else:
+            self.place_individuals_fixed(individuals, positions)
 
-    def place_individuals(self, individuals):
+
+    def place_individuals_random(self, individuals):
         """Based on the structure map the individuals are placed in the crowd map.
 
         Parameters
@@ -78,6 +82,38 @@ class CrowdMap(object):
         for individual in individuals:
             individual.row, individual.col = empty_positions.pop(randint(0, len(empty_positions) - 1))
             self.map[individual.row][individual.col] = individual
+
+
+    def place_individuals_fixed(self, individuals, positions):
+        """Based on the structure map and a list of positions the individuals are placed in the crowd map.
+
+        Parameters
+        ----------
+        individuals : list of Individual
+            Contains specific information about individuals.
+        positions : list of tuple (int, int)
+            Contains information about where each individual should be placed.
+        """
+        pos = []
+        with open(positions, 'r') as arq:
+            line = arq.readline()
+            line = line.split(',')
+            pos.append((line[0], line[1]))
+
+        empty_positions = set(self.structure_map.get_empty_positions())
+        shuffle(individuals)
+        i = 0
+        for individual in individuals:
+            if pos[i] in empty_positions:
+                individual.row, individual.col = pos[i][0], pos[i][1]
+                # individual.row, individual.col = empty_positions.pop(randint(0, len(empty_positions) - 1))
+                self.map[individual.row][individual.col] = individual
+                empty_positions.remove((pos[i][0], pos[i][1]))
+            else:
+                print("Position setted not in empty positions")
+                exit(-1)
+            i += 1
+
 
     def check_empty_position(self, row, col):
         """Check if a position in the map is empty

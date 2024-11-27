@@ -13,7 +13,7 @@ import json
 class Scenario(object):
 
 
-    def __init__(self, experiment, doors=None, draw=False, scenario_seed=0, simulation_seed=0):
+    def __init__(self, experiment, doors=None, draw=False, scenario_seed=0, simulation_seed=0, individuals_position=False):
         self.directory = experiment
 
         self.sep = os.path.sep
@@ -29,6 +29,7 @@ class Scenario(object):
         self.draw = draw
         self.scenario_seed = scenario_seed
         self.simulation_seed = simulation_seed
+        self.individuals_position = individuals_position
 
         self.num_simulation = 0
         self.num_scenario = 0
@@ -87,7 +88,11 @@ class Scenario(object):
     def load_crowd_map(self):
         self.crowd_map = CrowdMap(self.directory, self.structure_map)
         random.seed(self.scenario_seed)
-        self.crowd_map.load_map(self.individuals)
+        # with open(self.root_path + "input" + self.sep + self.directory + self.sep + "individuals.json", 'r') as json_file:
+        if not self.individuals_position:
+            self.crowd_map.load_map(self.individuals)
+        else:
+            self.crowd_map.load_map(self.individuals, self.root_path + "input" + self.sep + self.directory + self.sep + "positions.txt")
         if (self.draw):
             self.crowd_map.draw_map(self.root_path + "output" + self.sep + self.directory, 0)
 
@@ -125,7 +130,7 @@ class Scenario(object):
 
     def soft_reset_individuals(self):
         for individual in self.individuals:
-            individual.row
+            individual.row = 0
             individual.col = 0
             individual.old_direction = -1
             individual.evacuated = False
