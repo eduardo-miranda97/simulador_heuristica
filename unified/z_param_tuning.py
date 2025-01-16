@@ -3,8 +3,11 @@ from pymoo.core.problem import Problem
 from pymoo.optimize import minimize
 
 from pymoo.operators.sampling.rnd import BinaryRandomSampling
-from pymoo.operators.crossover.pntx import TwoPointCrossover, SinglePointCrossover, UniformCrossover, HalfUniformCrossover
-from pymoo.operators.mutation.bitflip import BitflipMutation, InversionMutation
+from pymoo.operators.crossover.pntx import TwoPointCrossover, SinglePointCrossover
+from pymoo.operators.crossover.ux import UniformCrossover
+from pymoo.operators.crossover.hux import HalfUniformCrossover
+from pymoo.operators.mutation.bitflip import BitflipMutation
+from pymoo.operators.mutation.inversion import InversionMutation
 
 import numpy as np
 from sim_ca_simulator import Simulator
