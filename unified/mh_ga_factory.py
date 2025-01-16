@@ -74,19 +74,28 @@ class Factory(ChromosomeFactory):
 
     def crossover(self, parent_a, parent_b):
         gene_size = len(parent_a.configuration)
-        qtd_mut = max(int(gene_size * 0.3), 1)
-        
+        qtd_cut = max(int(gene_size * 0.3), 1)
+
         child1 = [0] * gene_size
         child2 = [0] * gene_size
-        for i in range(gene_size):
+        i = 0
+        while i < qtd_cut:
             child1[i] = parent_a.configuration[i]
             child2[i] = parent_b.configuration[i]
+            i += 1
 
-        for i in range(qtd_mut):
-            i = randint(0, gene_size - 1)
-            child1[i] = not child1[i]
-            i = randint(0, gene_size - 1)
-            child2[i] = not child2[i]
+        while i < gene_size:
+            child1[i] = parent_b.configuration[i]
+            child2[i] = parent_a.configuration[i]
+            i += 1
+
+        # print()
+        # print(f"Parent1: {parent_a.configuration}")
+        # print(f"Parent2: {parent_b.configuration}")
+        # print()
+        # print(f"Child1: {child1}")
+        # print(f"Child2: {child2}")
+        # print()
 
         return Gene(child1), Gene(child2)
 
