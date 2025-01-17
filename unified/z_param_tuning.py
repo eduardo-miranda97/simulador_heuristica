@@ -10,6 +10,8 @@ from pymoo.operators.mutation.bitflip import BitflipMutation
 from pymoo.operators.mutation.inversion import InversionMutation
 
 import numpy as np
+import os
+
 from sim_ca_simulator import Simulator
 from sim_ca_scenario import Scenario
 from mh_ga_instance import read_instance
@@ -117,3 +119,6 @@ with open(output_file, "w") as file:
                                 f"{population_size},{crossover_cls.__name__},{crossover_prob},"
                                 f"{mutation_cls.__name__},{mutation_prob},{list(obj_values)}\n"
                             )
+
+                        file.flush()
+                        os.fsync()
