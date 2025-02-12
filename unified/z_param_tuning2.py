@@ -152,8 +152,8 @@ with open(output_file, "w") as file:
                         res = minimize(
                             problem,
                             algorithm,
+                            # termination=('n_gen', 50),
                             # termination=('n_gen', 100),
-                            # termination=('n_gen', 200),
                             # seed=10,
                             # seed=20,
                             # seed=30,
