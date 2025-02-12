@@ -67,6 +67,7 @@ mutation_methods = [
     (BitflipMutation, {"prob": [0.05]})
 ]
 population_sizes = [100]
+par = '_par1'
 '''
 
 #Config 2
@@ -78,6 +79,7 @@ mutation_methods = [
     (BitflipMutation, {"prob": [0.1]})
 ]
 population_sizes = [100]
+par = '_par2'
 '''
 
 #Config 3
@@ -89,6 +91,7 @@ mutation_methods = [
     (BitflipMutation, {"prob": [0.01]})
 ]
 population_sizes = [200]
+par = '_par3'
 '''
 
 #Config 4
@@ -100,6 +103,7 @@ mutation_methods = [
     (BitflipMutation, {"prob": [0.1]})
 ]
 population_sizes = [200]
+par = '_par4'
 '''
 
 #Config 5
@@ -111,62 +115,63 @@ mutation_methods = [
     (InversionMutation, {"prob": [0.05]})
 ]
 population_sizes = [200]
+par = '_par5'
 '''
 
 
 instance = read_instance("tuning_cult_experiment")
 problem = ScenarioOptimizationProblem(instance)
 
+
 # Arquivo para salvar os resultados
 output_file = "tuning_results.txt"
+# seeds = [10, 20, 30, 40, 50]
+# seeds = [60, 70, 80, 90, 100]
 
-# Loop de tuning
-with open(output_file, "w") as file:
-    # Cabeçalho do arquivo
-    file.write("pop_size,crossover,crossover_prob,mutation,mutation_prob,F\n")
+for seed_escolhida in seeds:
+    # Loop de tuning
+    with open(output_file + par + '_s' + str(seed_escolhida), "w") as file:
+        # Cabeçalho do arquivo
+        file.write("pop_size,crossover,crossover_prob,mutation,mutation_prob,F\n")
 
-    for population_size in population_sizes:
-        for crossover_cls, crossover_params in crossover_methods:
-            for mutation_cls, mutation_params in mutation_methods:
-                # Gera combinações de parâmetros
-                crossover_probs = crossover_params.get("prob", [None])
-                mutation_probs = mutation_params.get("prob", [None])
+        for population_size in population_sizes:
+            for crossover_cls, crossover_params in crossover_methods:
+                for mutation_cls, mutation_params in mutation_methods:
+                    # Gera combinações de parâmetros
+                    crossover_probs = crossover_params.get("prob", [None])
+                    mutation_probs = mutation_params.get("prob", [None])
 
-                for crossover_prob in crossover_probs:
-                    for mutation_prob in mutation_probs:
-                        # Define os operadores com os parâmetros
-                        crossover_operator = crossover_cls(prob=crossover_prob) if crossover_prob else crossover_cls()
-                        mutation_operator = mutation_cls(prob=mutation_prob) if mutation_prob else mutation_cls()
+                    for crossover_prob in crossover_probs:
+                        for mutation_prob in mutation_probs:
+                            # Define os operadores com os parâmetros
+                            crossover_operator = crossover_cls(prob=crossover_prob) if crossover_prob else crossover_cls()
+                            mutation_operator = mutation_cls(prob=mutation_prob) if mutation_prob else mutation_cls()
 
-                        # Cria o algoritmo NSGA-II
-                        algorithm = NSGA2(
-                            pop_size=population_size,
-                            sampling=BinaryRandomSampling(),
-                            crossover=crossover_operator,
-                            mutation=mutation_operator
-                        )
-
-                        # Avalia a configuração
-                        print(f"Running: pop_size={population_size}, crossover={crossover_cls.__name__}, "
-                              f"crossover_prob={crossover_prob}, mutation={mutation_cls.__name__}, mutation_prob={mutation_prob}")
-                        res = minimize(
-                            problem,
-                            algorithm,
-                            # termination=('n_gen', 50),
-                            # termination=('n_gen', 100),
-                            # seed=10,
-                            # seed=20,
-                            # seed=30,
-                            # seed=40,
-                            # seed=50,
-                            verbose=False
-                        )
-
-                        # Salva os resultados no arquivo
-                        for obj_values in res.F:
-                            file.write(
-                                f"{population_size},{crossover_cls.__name__},{crossover_prob},"
-                                f"{mutation_cls.__name__},{mutation_prob},{list(obj_values)}\n"
+                            # Cria o algoritmo NSGA-II
+                            algorithm = NSGA2(
+                                pop_size=population_size,
+                                sampling=BinaryRandomSampling(),
+                                crossover=crossover_operator,
+                                mutation=mutation_operator
                             )
 
-                        file.flush()
+                            # Avalia a configuração
+                            print(f"Running: pop_size={population_size}, crossover={crossover_cls.__name__}, "
+                                f"crossover_prob={crossover_prob}, mutation={mutation_cls.__name__}, mutation_prob={mutation_prob}")
+                            res = minimize(
+                                problem,
+                                algorithm,
+                                # termination=('n_gen', 50),
+                                # termination=('n_gen', 100),
+                                seed=seed_escolhida,
+                                verbose=False
+                            )
+
+                            # Salva os resultados no arquivo
+                            for obj_values in res.F:
+                                file.write(
+                                    f"{population_size},{crossover_cls.__name__},{crossover_prob},"
+                                    f"{mutation_cls.__name__},{mutation_prob},{list(obj_values)}\n"
+                                )
+
+                            file.flush()
