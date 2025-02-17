@@ -96,12 +96,11 @@ class CrowdMap(object):
         """
         pos = []
         with open(positions, 'r') as arq:
-            line = arq.readline()
-            line = line.split(',')
-            pos.append((line[0], line[1]))
+            for line in arq:
+                line = line.strip().split(',')
+                pos.append((int(line[0]), int(line[1])))
 
         empty_positions = set(self.structure_map.get_empty_positions())
-        shuffle(individuals)
         i = 0
         for individual in individuals:
             if pos[i] in empty_positions:
