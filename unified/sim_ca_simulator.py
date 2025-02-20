@@ -4,7 +4,7 @@ from sim_ca_logs import Logs
 
 class Simulator(object):
 
-    MAX_ITERATIONS = 200
+    MAX_ITERATIONS = 1200
 
     # def __init__(self, structure_map, wall_map, static_map, crowd_map, dinamic_map, individuals, directory):
 
