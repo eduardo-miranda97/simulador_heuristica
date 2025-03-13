@@ -89,7 +89,7 @@ for seed_escolhida in seeds:
         )
 
         # Salva os resultados no arquivo
-        for obj_values in res.F:
-            file.write(f"{seed_escolhida},{list(obj_values)}\n")
+        for gene, obj_values in zip(res.X, res.F):
+            file.write(f"{seed_escolhida},{list(obj_values)},{list(gene)}\n")
 
         file.flush()
