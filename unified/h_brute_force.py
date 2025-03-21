@@ -28,7 +28,8 @@ class BruteForce:
             i = 0
             menor = True
             while (i < len(combs)):
-                menor = menor and (obj[0] < objs[i][0] or obj[1] < objs[i][1] or obj[2] < objs[i][2])
+                menor = menor and ((obj[0] < objs[i][0] or obj[1] < objs[i][1] or obj[2] < objs[i][2])
+                                   or (obj[0] == objs[i][0] and obj[1] == objs[i][1] and obj[2] == objs[i][2]))
 
                 if (obj[0] < objs[i][0] and obj[1] < objs[i][1] and obj[2] < objs[i][2]
                     or obj[0] == objs[i][0] and obj[1] < objs[i][1] and obj[2] < objs[i][2]
