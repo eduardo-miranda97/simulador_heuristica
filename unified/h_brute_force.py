@@ -49,8 +49,8 @@ class BruteForce:
                 combs.append(combination)
                 objs.append(obj)
 
-        print(f"Todos combinations: {todascombs}, Tam:{len(todascombs)}")
-        print(f"Todos objs: {todosobs}, Tam:{len(todosobs)}")
+        # print(f"Todos combinations: {todascombs}, Tam:{len(todascombs)}")
+        # print(f"Todos objs: {todosobs}, Tam:{len(todosobs)}")
         print(f"Combinations final: {combs}, Tam:{len(combs)}")
         print(f"Objs final: {objs}, Tam:{len(objs)}")
 
