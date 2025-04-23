@@ -28,16 +28,12 @@ class BruteForce:
             i = 0
             menor = True
             while (i < len(combs)):
-                menor = menor and ((obj[0] < objs[i][0] or obj[1] < objs[i][1] or obj[2] < objs[i][2])
-                                   or (obj[0] == objs[i][0] and obj[1] == objs[i][1] and obj[2] == objs[i][2]))
+                menor = menor and ((obj[0] < objs[i][0] or obj[1] < objs[i][1] )
+                                   or (obj[0] == objs[i][0] and obj[1] == objs[i][1] ))
 
-                if (obj[0] < objs[i][0] and obj[1] < objs[i][1] and obj[2] < objs[i][2]
-                    or obj[0] == objs[i][0] and obj[1] < objs[i][1] and obj[2] < objs[i][2]
-                    or obj[0] < objs[i][0] and obj[1] == objs[i][1] and obj[2] < objs[i][2]
-                    or obj[0] < objs[i][0] and obj[1] < objs[i][1] and obj[2] == objs[i][2]
-                    or obj[0] == objs[i][0] and obj[1] == objs[i][1] and obj[2] < objs[i][2]
-                    or obj[0] == objs[i][0] and obj[1] < objs[i][1] and obj[2] == objs[i][2]
-                    or obj[0] < objs[i][0] and obj[1] == objs[i][1] and obj[2] == objs[i][2]
+                if (obj[0] < objs[i][0] and obj[1] < objs[i][1] 
+                    or obj[0] == objs[i][0] and obj[1] < objs[i][1] 
+                    or obj[0] < objs[i][0] and obj[1] == objs[i][1] 
                 ):
                     combs.pop(i)
                     objs.pop(i)
@@ -68,7 +64,7 @@ class BruteForce:
                             self.instance.scenario_seed[0], self.instance.simulation_seed)
         simulator = Simulator(scen)
         iterations, qtdDistance = simulator.simulate()
-        print(f"Portas: {len(doors)}, Iter: {iterations}, Dist: {qtdDistance}")
+        print(f"Portas: {len(doors)}, Iter: {iterations}")
         iters.append(iterations)
         # distances.append(qtdDistance)
 
