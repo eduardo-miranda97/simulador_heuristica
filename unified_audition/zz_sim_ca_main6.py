@@ -53,7 +53,6 @@ def save_result(result, uncoded, filename):
                 {
                     'qtd_doors': result[i].obj[0],
                     'iterations': result[i].obj[1],
-                    'distance': result[i].obj[2],
                     'gene': result[i].gene.configuration,
                     'generation': result[i].generation,
                     'configuration': uncoded[i]
