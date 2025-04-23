@@ -67,11 +67,11 @@ if __name__ == "__main__":
     args = parser.parse_args()
     instance = read_instance(args.experiment)
 
-    # seeds1 = [1,2,3,4,5,6]
-    # seeds2 = [7,8,9,10,11,12]
-    # seeds3 = [13,14,15,16,17,18]
-    # seeds4 = [19,20,21,22,23,24]
-    # seeds5 = [25,26,27,28,29,30]
+    # seeds = [1,2,3,4,5,6]
+    # seeds = [7,8,9,10,11,12]
+    # seeds = [13,14,15,16,17,18]
+    # seeds = [19,20,21,22,23,24]
+    # seeds = [25,26,27,28,29,30]
     for seed_escolhida in seeds:
         random.seed(seed_escolhida)
         np.random.seed(seed_escolhida)

@@ -63,14 +63,14 @@ class BruteForce:
                 doors.append(self.exits[i])
 
         iters = []
-        distances = []
+        # distances = []
         scen = Scenario(self.instance.experiment, doors, self.instance.draw,
                             self.instance.scenario_seed[0], self.instance.simulation_seed)
         simulator = Simulator(scen)
         iterations, qtdDistance = simulator.simulate()
         print(f"Portas: {len(doors)}, Iter: {iterations}, Dist: {qtdDistance}")
         iters.append(iterations)
-        distances.append(qtdDistance)
+        # distances.append(qtdDistance)
 
         i=0
         for current_seed in self.instance.scenario_seed[1:]:
@@ -78,14 +78,14 @@ class BruteForce:
             scen.scenario_reset(current_seed, self.instance.simulation_seed)
             simulator = Simulator(scen)
             iterations, qtdDistance = simulator.simulate()
-            print(f"Portas: {len(doors)}, Iter: {iterations}, Dist: {qtdDistance}")
+            print(f"Portas: {len(doors)}, Iter: {iterations}")
             iters.append(iterations)
-            distances.append(qtdDistance)
+            # distances.append(qtdDistance)
 
         soma = sum(iters)
-        distance = sum(distances)
+        # distance = sum(distances)
         soma = soma / len(iters)
-        distance = distance / len(distances)
+        # distance = distance / len(distances)
 
-        print(f"Final decode - Portas: {len(doors)}, Iters: {soma}, Distance: {distance}")
-        return len(doors), soma, distance
+        print(f"Final decode - Portas: {len(doors)}, Iters: {soma}")
+        return len(doors), soma#, distance
