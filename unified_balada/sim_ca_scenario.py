@@ -13,7 +13,7 @@ import json
 class Scenario(object):
 
 
-    def __init__(self, experiment, doors=None, draw=False, scenario_seed=0, simulation_seed=0, individuals_position=True):
+    def __init__(self, experiment, doors=None, draw=False, scenario_seed=0, simulation_seed=0, individuals_position=False):
         self.directory = experiment
 
         self.sep = os.path.sep
