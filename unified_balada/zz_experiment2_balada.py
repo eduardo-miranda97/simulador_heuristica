@@ -27,10 +27,7 @@ class ScenarioOptimizationProblem(Problem):
         out["F"] = results
 
     def decode(self, gene):
-        doors = []
-        for i in range(len(gene.configuration)):
-            if gene.configuration[i]:
-                doors.append(self.exits[i])
+        doors = [self.exits[i] for i in range(len(gene)) if gene[i]]
 
         iters = []
         # distances = []
